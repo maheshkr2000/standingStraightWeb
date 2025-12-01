@@ -1,12 +1,15 @@
 import { Navigation, Footer, AnimatedCounter } from "@/components/shared";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Heart, Users, Globe, Stethoscope, Award, MapPin, Calendar, ArrowRight } from "lucide-react";
+import { Heart, Users, Stethoscope, Award, MapPin, ArrowRight } from "lucide-react";
 import heroMissionImage from "@/assets/hero-child-surgery.jpg";
 
 const OurMissionPage = () => {
+  const actionHighlights = [
+    "Life-changing surgeries",
+    "Local doctor training",
+    "Long-term recovery care"
+  ];
+
   const missionPillars = [
     {
       title: "Surgery",
@@ -144,7 +147,7 @@ const OurMissionPage = () => {
           ></div>
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="relative max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
               <div className="text-center lg:text-left">
                 <div className="inline-block bg-white/10 backdrop-blur-sm rounded-full px-6 py-2 mb-6">
                   <span className="text-white/90 font-medium">Transforming Lives Since 2010</span>
@@ -159,110 +162,40 @@ const OurMissionPage = () => {
                   Providing world-class orthopedic and spine deformity care to impoverished children 
                   and young adults in developing countries.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a 
-                    href="/donate" 
-                    className="bg-white text-trust-blue px-8 py-4 rounded-lg font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg"
-                  >
-                    Support Our Mission
-                  </a>
-                  <a 
-                    href="/volunteers" 
-                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-trust-blue transition-all duration-300"
-                  >
-                    Join Our Team
-                  </a>
-                </div>
               </div>
-              
-              <div className="hidden lg:block">
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-warm-orange/20 to-medical-teal/20 rounded-2xl blur-xl"></div>
-                  <Card className="relative bg-white/10 backdrop-blur-sm border-white/20 p-8">
-                    <h3 className="text-2xl font-bold text-white mb-6">Our Mission Statement</h3>
-                    <p className="text-white/90 leading-relaxed text-lg">
-                      To provide world-class orthopedic and spine deformity care to impoverished children 
-                      and young adults in third world and developing countries so they can stand straight, 
-                      become capable of taking care of themselves, and live productive lives.
-                    </p>
-                  </Card>
+              <div className="relative flex justify-center lg:justify-end">
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-4 items-stretch lg:items-end lg:fixed lg:top-24 lg:right-6 lg:z-30">
+                  <a
+                    href="/donate"
+                    className="inline-flex items-center justify-center gap-2 bg-warm-orange text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span>Support Our Mission</span>
+                  </a>
+                  <a
+                    href="/volunteers"
+                    className="inline-flex items-center justify-center gap-2 bg-white text-foreground border border-border px-6 py-3 rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg transition-all duration-300"
+                  >
+                    <Users className="w-5 h-5" />
+                    <span>Volunteer With Us</span>
+                  </a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Three Pillars Overview */}
-        <section className="py-20 bg-gradient-subtle">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                <span className="bg-gradient-action bg-clip-text text-transparent">
-                  Surgery. Education. Sustainability.
-                </span>
-              </h2>
-              <p className="text-xl text-text-gray leading-relaxed max-w-4xl mx-auto">
-                Our three-pillar approach ensures that every child receives not just immediate medical care, 
-                but benefits from a healthcare system that continues to grow stronger. We don't just heal—we build, 
-                teach, and empower communities to heal themselves.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="p-8 text-center bg-card shadow-soft hover:shadow-card hover:scale-105 transition-all duration-300">
-                <div className="w-20 h-20 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Stethoscope className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Surgery</h3>
-                <p className="text-text-gray">Free, life-changing spinal surgeries using the latest techniques</p>
-              </Card>
-              
-              <Card className="p-8 text-center bg-card shadow-soft hover:shadow-card hover:scale-105 transition-all duration-300">
-                <div className="w-20 h-20 bg-medical-teal rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Award className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Education</h3>
-                <p className="text-text-gray">Training local medical professionals for sustainable impact</p>
-              </Card>
-              
-              <Card className="p-8 text-center bg-card shadow-soft hover:shadow-card hover:scale-105 transition-all duration-300">
-                <div className="w-20 h-20 bg-gradient-action rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Sustainability</h3>
-                <p className="text-text-gray">Building lasting healthcare infrastructure and partnerships</p>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Impact Statistics */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Impact in Numbers</h2>
-              <p className="text-xl text-text-gray">Measurable results that show the difference we're making</p>
-            </div>
-            
-            <div className="bg-gradient-hero rounded-3xl p-8 md:p-12">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-                {impactStats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl md:text-5xl font-bold text-white mb-2">
-                      <AnimatedCounter value={stat.number} suffix={stat.suffix} />
-                    </div>
-                    <p className="text-white/80 font-medium text-sm md:text-base">{stat.label}</p>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
         </section>
 
         {/* Mission Pillars */}
-        <section className="py-20">
+        <section className="py-20 bg-gradient-subtle">
           <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-center mb-16">Our Three Pillars</h2>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                Our Three Pillars
+              </h2>
+              <p className="text-xl text-text-gray leading-relaxed max-w-4xl mx-auto">
+                A unified approach across surgery, education, and sustainability ensures that every StandingStraight mission delivers immediate relief and long-term resilience for the communities we serve.
+              </p>
+            </div>
             <div className="grid lg:grid-cols-3 gap-8">
               {missionPillars.map((pillar, index) => {
                 const IconComponent = pillar.icon;
@@ -291,6 +224,50 @@ const OurMissionPage = () => {
                         ))}
                       </ul>
                     </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Statistics */}
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Impact in Numbers</h2>
+              <p className="text-xl text-text-gray">Measurable results that show the difference we're making</p>
+            </div>
+            
+            <div className="bg-gradient-hero rounded-3xl p-8 md:p-12">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                {impactStats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-3xl md:text-5xl font-bold text-white mb-2">
+                      <AnimatedCounter value={stat.number} suffix={stat.suffix} />
+                    </div>
+                    <p className="text-white/80 font-medium text-sm md:text-base">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Core Values */}
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-3xl font-bold text-center mb-16">Our Core Values</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {coreValues.map((value, index) => {
+                const IconComponent = value.icon;
+                return (
+                  <Card key={index} className="p-6 bg-card shadow-soft text-center">
+                    <div className="flex justify-center mb-4">
+                      <IconComponent className="w-12 h-12 text-trust-blue" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-3">{value.title}</h3>
+                    <p className="text-text-gray leading-relaxed">{value.description}</p>
                   </Card>
                 );
               })}
@@ -333,27 +310,6 @@ const OurMissionPage = () => {
           </div>
         </section>
 
-        {/* Core Values */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-center mb-16">Our Core Values</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {coreValues.map((value, index) => {
-                const IconComponent = value.icon;
-                return (
-                  <Card key={index} className="p-6 bg-card shadow-soft text-center">
-                    <div className="flex justify-center mb-4">
-                      <IconComponent className="w-12 h-12 text-trust-blue" />
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">{value.title}</h3>
-                    <p className="text-text-gray leading-relaxed">{value.description}</p>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         {/* Call to Action */}
         <section className="py-20 bg-gradient-action">
           <div className="max-w-4xl mx-auto px-6 text-center">
@@ -362,14 +318,13 @@ const OurMissionPage = () => {
               Whether you're a medical professional, passionate volunteer, or someone who believes 
               every child deserves quality healthcare—there's a place for you in our mission.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/volunteers" className="bg-white text-trust-blue px-8 py-3 rounded-lg font-medium hover:bg-white/90 transition-colors">
-                Volunteer With Us
-              </a>
-              <a href="/donate" className="border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-trust-blue transition-colors">
-                Support Our Work
-              </a>
-            </div>
+            <a 
+              href="/contact" 
+              className="inline-flex items-center gap-2 text-white font-semibold underline-offset-4 hover:underline"
+            >
+              Talk to our team about ways you can help
+              <ArrowRight className="w-5 h-5" />
+            </a>
           </div>
         </section>
       </main>
