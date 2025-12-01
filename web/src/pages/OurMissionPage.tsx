@@ -178,46 +178,22 @@ const OurMissionPage = () => {
               <div className="relative flex justify-center lg:justify-end">
                 <div className={`flex gap-3 lg:fixed lg:top-24 lg:z-30 transition-all duration-500 ease-in-out ${
                   isScrolled 
-                    ? "flex-row items-center lg:right-4" 
-                    : "flex-col sm:flex-row lg:flex-col items-stretch lg:items-end lg:right-6"
-                }`}>
+                    ? "opacity-0 pointer-events-none scale-95" 
+                    : "opacity-100 pointer-events-auto scale-100"
+                } flex-col sm:flex-row lg:flex-col items-stretch lg:items-end lg:right-6`}>
                   <a
                     href="/donate"
-                    className={`inline-flex items-center justify-center bg-warm-orange text-white font-semibold rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-500 ease-in-out overflow-hidden ${
-                      isScrolled 
-                        ? "w-12 h-12 px-0 min-w-[3rem]" 
-                        : "px-6 py-3 min-w-[200px]"
-                    }`}
+                    className="inline-flex items-center justify-center gap-2 bg-warm-orange text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-300"
                   >
-                    <HandHeart className={`w-5 h-5 flex-shrink-0 transition-transform duration-500 ${
-                      isScrolled ? "" : "mr-2"
-                    }`} />
-                    <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${
-                      isScrolled 
-                        ? "w-0 opacity-0 ml-0 overflow-hidden" 
-                        : "w-auto opacity-100 ml-0"
-                    }`}>
-                      Support Our Mission
-                    </span>
+                    <HandHeart className="w-5 h-5" />
+                    <span>Support Our Mission</span>
                   </a>
                   <a
                     href="/volunteers"
-                    className={`inline-flex items-center justify-center bg-white text-foreground border border-border rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg hover:scale-105 transition-all duration-500 ease-in-out overflow-hidden ${
-                      isScrolled 
-                        ? "w-12 h-12 px-0 min-w-[3rem]" 
-                        : "px-6 py-3 min-w-[200px]"
-                    }`}
+                    className="inline-flex items-center justify-center gap-2 bg-white text-foreground border border-border px-6 py-3 rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg hover:scale-105 transition-all duration-300"
                   >
-                    <Users className={`w-5 h-5 flex-shrink-0 transition-transform duration-500 ${
-                      isScrolled ? "" : "mr-2"
-                    }`} />
-                    <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${
-                      isScrolled 
-                        ? "w-0 opacity-0 ml-0 overflow-hidden" 
-                        : "w-auto opacity-100 ml-0"
-                    }`}>
-                      Volunteer With Us
-                    </span>
+                    <Users className="w-5 h-5" />
+                    <span>Volunteer With Us</span>
                   </a>
                 </div>
               </div>
@@ -358,13 +334,20 @@ const OurMissionPage = () => {
               Whether you're a medical professional, passionate volunteer, or someone who believes 
               every child deserves quality healthcare—there's a place for you in our mission.
             </p>
-            <a 
-              href="/contact" 
-              className="inline-flex items-center gap-2 text-white font-semibold underline-offset-4 hover:underline"
-            >
-              Talk to our team about ways you can help
-              <ArrowRight className="w-5 h-5" />
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a 
+                href="/volunteers" 
+                className="inline-flex items-center justify-center bg-white text-trust-blue font-semibold px-8 py-3 rounded-xl hover:bg-white/90 hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                Volunteer With Us
+              </a>
+              <a 
+                href="/donate" 
+                className="inline-flex items-center justify-center bg-warm-orange text-white border-2 border-white font-semibold px-8 py-3 rounded-xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                Support Our Work
+              </a>
+            </div>
           </div>
         </section>
       </main>
