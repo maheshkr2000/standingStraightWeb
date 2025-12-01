@@ -1,9 +1,21 @@
 import { Navigation, Footer, AnimatedCounter } from "@/components/shared";
 import { Card } from "@/components/ui/card";
-import { Heart, Users, Stethoscope, Award, MapPin, ArrowRight } from "lucide-react";
+import { HandHeart, Heart, Users, Stethoscope, Award, MapPin, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
 import heroMissionImage from "@/assets/hero-child-surgery.jpg";
 
 const OurMissionPage = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const actionHighlights = [
     "Life-changing surgeries",
     "Local doctor training",
@@ -164,20 +176,48 @@ const OurMissionPage = () => {
                 </p>
               </div>
               <div className="relative flex justify-center lg:justify-end">
-                <div className="flex flex-col sm:flex-row lg:flex-col gap-4 items-stretch lg:items-end lg:fixed lg:top-24 lg:right-6 lg:z-30">
+                <div className={`flex gap-3 lg:fixed lg:top-24 lg:z-30 transition-all duration-500 ease-in-out ${
+                  isScrolled 
+                    ? "flex-row items-center lg:right-4" 
+                    : "flex-col sm:flex-row lg:flex-col items-stretch lg:items-end lg:right-6"
+                }`}>
                   <a
                     href="/donate"
-                    className="inline-flex items-center justify-center gap-2 bg-warm-orange text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:-translate-y-0.5 transition-all duration-300"
+                    className={`inline-flex items-center justify-center bg-warm-orange text-white font-semibold rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-500 ease-in-out overflow-hidden ${
+                      isScrolled 
+                        ? "w-12 h-12 px-0 min-w-[3rem]" 
+                        : "px-6 py-3 min-w-[200px]"
+                    }`}
                   >
-                    <Heart className="w-5 h-5" />
-                    <span>Support Our Mission</span>
+                    <HandHeart className={`w-5 h-5 flex-shrink-0 transition-transform duration-500 ${
+                      isScrolled ? "" : "mr-2"
+                    }`} />
+                    <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${
+                      isScrolled 
+                        ? "w-0 opacity-0 ml-0 overflow-hidden" 
+                        : "w-auto opacity-100 ml-0"
+                    }`}>
+                      Support Our Mission
+                    </span>
                   </a>
                   <a
                     href="/volunteers"
-                    className="inline-flex items-center justify-center gap-2 bg-white text-foreground border border-border px-6 py-3 rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg transition-all duration-300"
+                    className={`inline-flex items-center justify-center bg-white text-foreground border border-border rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg hover:scale-105 transition-all duration-500 ease-in-out overflow-hidden ${
+                      isScrolled 
+                        ? "w-12 h-12 px-0 min-w-[3rem]" 
+                        : "px-6 py-3 min-w-[200px]"
+                    }`}
                   >
-                    <Users className="w-5 h-5" />
-                    <span>Volunteer With Us</span>
+                    <Users className={`w-5 h-5 flex-shrink-0 transition-transform duration-500 ${
+                      isScrolled ? "" : "mr-2"
+                    }`} />
+                    <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${
+                      isScrolled 
+                        ? "w-0 opacity-0 ml-0 overflow-hidden" 
+                        : "w-auto opacity-100 ml-0"
+                    }`}>
+                      Volunteer With Us
+                    </span>
                   </a>
                 </div>
               </div>
