@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import standingStraightLogo from "@/assets/Standing Straight Logo v2.png";
 
 const Navigation = () => {
@@ -35,16 +36,26 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
-            <Link 
-              to="/our-mission" 
-              className={`relative transition-smooth after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left ${
-                isActive("/our-mission") 
-                  ? "text-foreground after:scale-x-100" 
-                  : "text-text-gray hover:text-foreground"
-              }`}
-            >
-              Our Mission
-            </Link>
+            <HoverCard openDelay={100}>
+              <HoverCardTrigger asChild>
+                <Link 
+                  to="/our-mission" 
+                  className={`relative transition-smooth after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left ${
+                    isActive("/our-mission") 
+                      ? "text-foreground after:scale-x-100" 
+                      : "text-text-gray hover:text-foreground"
+                  }`}
+                >
+                  Our Mission
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80 text-sm leading-relaxed" align="center" side="bottom">
+                <p className="font-semibold text-foreground mb-2">Mission Statement</p>
+                <p className="text-text-gray">
+                  We deliver world-class orthopedic and spine deformity care to children in developing countries so every child can stand straight and live independently.
+                </p>
+              </HoverCardContent>
+            </HoverCard>
             <Link 
               to="/success-stories" 
               className={`relative transition-smooth after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left ${
