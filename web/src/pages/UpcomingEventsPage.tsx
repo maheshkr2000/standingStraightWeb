@@ -130,7 +130,7 @@ const UpcomingEventsPage = () => {
     }
   ];
 
-  const roleOptions = ["Orthopaedic", "Pediatric", "Radiologist", "Neurologist"];
+  const roleOptions = ["Orthopedic Spine Surgeons", "Operating Room Spine Techs", "Operating Room Spine Nurses", "Neuro Physiologist"];
 
   const [isApplyOpen, setIsApplyOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
