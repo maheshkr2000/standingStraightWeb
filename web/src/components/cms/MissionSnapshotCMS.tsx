@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AnimatedCounter } from "@/components/shared";
-import { Building2, Users, Globe, Stethoscope, Heart, MapPin } from "lucide-react";
+import { Building2, Users, Globe, Stethoscope, Heart, MapPin, HandHeart } from "lucide-react";
 import { useMissionSnapshot } from "@/hooks/useSanityData";
 import type { MissionSnapshot } from "@/lib/sanity";
 import { LucideIcon } from "lucide-react";
@@ -18,6 +20,8 @@ const iconMap: { [key: string]: LucideIcon } = {
 
 const MissionSnapshotCMS = () => {
   const { data: missionData, isLoading, error } = useMissionSnapshot();
+  const [ctaHidden, setCtaHidden] = useState(false);
+  const location = useLocation();
 
   // Fallback data for when CMS is not available
   const fallbackData: MissionSnapshot = {
@@ -68,6 +72,12 @@ const MissionSnapshotCMS = () => {
     return IconComponent;
   };
 
+  useEffect(() => {
+    const onScroll = () => setCtaHidden(window.scrollY > 140);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   if (error) {
     console.error('Mission snapshot error:', error);
     // Return fallback component on error
@@ -92,6 +102,32 @@ const MissionSnapshotCMS = () => {
 
   return (
     <section id="mission" className="py-20 bg-gradient-subtle">
+      {/* Top-right CTAs mirroring OurMission page */}
+      {location.pathname !== "/our-mission" && (
+        <div className="hidden lg:block">
+          <div
+            className={`fixed right-6 top-24 z-30 flex flex-col gap-3 transition-all duration-500 ease-out ${
+              ctaHidden ? "opacity-0 pointer-events-none translate-y-2" : "opacity-100 translate-y-0"
+            }`}
+          >
+            <a
+              href="/donate"
+              className="inline-flex items-center justify-center gap-2 bg-warm-orange text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-300"
+            >
+              <HandHeart className="w-5 h-5" />
+              <span>Support Our Mission</span>
+            </a>
+            <a
+              href="/volunteers"
+              className="inline-flex items-center justify-center gap-2 bg-white text-foreground border border-border px-6 py-3 rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              <Users className="w-5 h-5" />
+              <span>Volunteer With Us</span>
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
