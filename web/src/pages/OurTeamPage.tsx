@@ -27,8 +27,7 @@ const boardMembers: TeamMember[] = [
     name: "Ravi S. Bains, MD",
     title: "Chairman & CEO",
     email: "drbains@standingstraight.org",
-    photo:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/1.png",
     summary:
       "Orthopedic spine surgeon leading global missions and mentoring future surgeons.",
     bio: "Dr. Ravi S. Bains is an Orthopedic Spine Surgeon who specializes in adult and pediatric spine deformities, degenerative conditions, tumors, infections, and trauma. He was born in London, England and then attended St Georges College in Mussoorie, India for 5 years. After completing his orthopedic residency at the University of Southern California and his spine surgery fellowship at University of California, Davis, he joined Kaiser Permanente's Spine Surgery Department in 2001. Currently, he serves as the Chief of Spine Surgery, where he has helped build a world class spine surgery program which involves training the next generation of spine surgeons. He has led several orthopedic medical missions in Central and South America to enable children to live normal and productive lives.",
@@ -40,11 +39,10 @@ const boardMembers: TeamMember[] = [
     name: "Gina S. Kedia",
     title: "Secretary",
     email: "gina@standingstraight.org",
-    photo:
-      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/2.png",
     summary:
-      "Strategic planner and executive leader with 25+ years across healthcare and tech.",
-    bio: "A founding member of Standing Straight, Gina has over 25 years of experience in the strategic planning and executive roles for major healthcare, human services, finance, and technology projects at companies such as NASA, Booz-Allen, and MAXMUS. During these years, she served in many lead roles including chief information officer (CIO), chief operating officer (COO), & program director for domestics and international clients. She has also presided over national & international conferences/meetings with senior executives of private organizations as well as elected officials from the Federal, State and County government.",
+      "Strategic planner and executive leader with 35+ years across healthcare and tech.",
+    bio: "A founding member of Standing Straight, Gina brings more than 35 years of experience in strategic planning and executive leadership across major healthcare, human services, finance, and technology initiatives. Her career includes senior leadership roles with organizations such as NASA, Booz Allen, and MAXIMUS, where she served as Vice President, Managing Director, Chief Information Officer (CIO), and Chief Operating Officer (COO) for both domestic and international clients. Throughout her career, Gina has presided over national and international conferences and meetings, working closely with senior executives from private organizations as well as elected officials at the federal, state, and county levels.",
     location: "California, USA",
     specialty: "Strategic Planning & Executive Leadership",
     focusAreas: ["Governance", "Operations", "Partnerships"],
@@ -53,8 +51,7 @@ const boardMembers: TeamMember[] = [
     name: "Kanwaljit S. Gill, MD",
     title: "Director",
     email: "",
-    photo:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/3.png",
     summary:
       "Orthopaedic surgeon expanding global access to complex pediatric care.",
     bio: "Dr. Kanwaljit Singh Gill is an orthopaedic surgeon who was born in Punjab, India. He returned to Punjab for the first time after 53 years with Standing Straight. He was compelled to go back to India to perform free orthopaedic surgeries on children with a great need for specialized surgery. Dr. Gill grew up in the UK and obtained his medical degree from University of Nottingham, England. After graduation, he worked at the Nottingham University Hospital and has also taught medical students at Stanford Medical School and University of California San Francisco, USA. He graduated from his Orthopaedic residency at University of California San Francisco and has been practicing with The Permanente Medical Group since 1991. Dr. Gill continues to practice orthopaedic surgery and hold many educational and leadership positions at Kaiser Permanente.",
@@ -66,8 +63,7 @@ const boardMembers: TeamMember[] = [
     name: "Todd Lincoln, MD",
     title: "Director",
     email: "",
-    photo:
-      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/4.png",
     summary:
       "Pediatric orthopedic specialist focused on scoliosis and complex hip care.",
     bio: "Dr. Lincoln specializes in scoliosis, pediatric orthopedics, and complex hip deformity. He has experience in treating the full range of musculoskeletal problems that can arise during infancy, childhood, and adolescence. He developed the hip preservation services specializing in complex hip reconstructions such as periacetabular osteotomy (PAO) surgery and surgical hip dislocation surgery for both adolescents and adults. Dr. Lincoln has volunteered his time each year to help children in Central and South America who lack adequate resources for their care.",
@@ -82,8 +78,7 @@ const advisors: TeamMember[] = [
     name: "Vikas Verma",
     title: "Advisor",
     email: "",
-    photo:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/5.png",
     summary:
       "Entrepreneur and IT leader guiding outreach, infrastructure, and partnerships.",
     bio: "Vikas Verma migrated to US in 2004, following completion of the bachelor's in engineering and subsequently the post-graduation (MBA) from India. Vikas is not only an entrepreneur but also a successful IT professional, establishing a diverse career that spanned nearly two decades. Over the years, he took on various roles, from starting his own ventures to working with top-tier IT companies, demonstrating adaptability and leadership skills.",
@@ -92,17 +87,16 @@ const advisors: TeamMember[] = [
     focusAreas: ["Strategy", "Technology enablement"],
   },
   {
-    name: "Nirmal Singh, MSc, D.ABNM",
-    title: "Mission Coordinator",
+    name: "Doug Yim, MD",
+    title: "Executive Advisor",
     email: "",
-    photo:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80",
+    photo: "/team/6.png",
     summary:
-      "Mission coordinator leading neurophysiology teams to improve surgical outcomes.",
-    bio: "Nirmal Singh moved to US in 2003 after completing his graduation from India and post graduation from Canada. With 10 years of experience in spinal cord and brain function monitoring he joined Kaiser Permanente in 2012. Currently he leads a team of neurophysiologists who helps improve surgical outcome of complex spine and pediatric Neurosurgery.",
-    location: "California, USA",
-    specialty: "Neurophysiology & Mission Coordination",
-    focusAreas: ["Mission operations", "Neurophysiology"],
+      "Interventional radiology leader advancing minimally invasive treatments for complex spine and trauma care.",
+    bio: "Dr. Doug Yim is the director of Interventional Radiology Residency at Johns Hopkins and past Chief/Associate Clinical Professor at UCI Medical Center. He has served as Chief of Interventional Radiology at the National Naval Medical Center treating wounded warriors, and as Director at Emory University where he developed minimally invasive image-guided techniques for spine tumors.",
+    location: "Maryland, USA",
+    specialty: "Interventional Radiology & Spine Oncology",
+    focusAreas: ["Image-guided therapy", "Spine tumors", "Residency leadership"],
   },
 ];
 
