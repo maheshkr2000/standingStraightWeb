@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { useHeroSection } from "@/hooks/useSanityData";
@@ -95,59 +93,12 @@ const HeroSectionCMS = () => {
               <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
                 World‑class pediatric spinal surgeries for underprivileged children—powered by generous donors, volunteers, and care teams.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button variant="donate" size="lg" className="text-lg px-8 py-4" asChild>
-                  <Link to="/donate">Donate Now</Link>
-                </Button>
-                <Button variant="hero" size="lg" className="text-lg px-8 py-4" asChild>
-                  <Link to="/our-mission">Our Mission</Link>
-                </Button>
-              </div>
             </div>
           </div>
         </div>
       </section>
     );
   }
-
-  const getButtonVariant = (style: string) => {
-    switch (style) {
-      case 'donate': return 'donate';
-      case 'hero': return 'hero';
-      case 'primary': return 'default';
-      case 'outline': return 'outline';
-      default: return 'default';
-    }
-  };
-
-  const isExternalLink = (link: string) => {
-    return link.startsWith('http://') || link.startsWith('https://');
-  };
-
-  const renderButton = (button: { text: string; link: string; style: string }, variant: 'primary' | 'secondary') => {
-    const buttonVariant = getButtonVariant(button.style);
-    const buttonProps = {
-      variant: buttonVariant as "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "donate" | "mission" | "story" | "hero",
-      size: "lg" as const,
-      className: "text-lg px-8 py-4"
-    };
-
-    if (isExternalLink(button.link)) {
-      return (
-        <Button {...buttonProps} asChild>
-          <a href={button.link} target="_blank" rel="noopener noreferrer">
-            {button.text}
-          </a>
-        </Button>
-      );
-    }
-
-    return (
-      <Button {...buttonProps} asChild>
-        <Link to={button.link}>{button.text}</Link>
-      </Button>
-    );
-  };
 
   return (
     <section className="relative h-[100svh] flex items-stretch overflow-hidden">
@@ -237,21 +188,17 @@ const HeroSectionCMS = () => {
               </div>
             </div>
           ) : (
-            <>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-                <span className="block lg:whitespace-nowrap">{hero.title}</span>
-                <span className="block lg:whitespace-nowrap bg-gradient-hero bg-clip-text text-transparent">
+            <div className="max-w-4xl lg:max-w-5xl">
+              <h1 className="text-4xl md:text-[52px] lg:text-[64px] font-bold mb-6 leading-[1.1] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                <span className="block text-balance">{hero.title}</span>
+                <span className="block bg-gradient-hero bg-clip-text text-transparent">
                   {hero.subtitle}
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed drop-shadow-[0_6px_18px_rgba(0,0,0,0.3)] bg-black/15 backdrop-blur-sm px-4 py-3 rounded-xl inline-block">
                 {hero.description}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                {renderButton(hero.primaryButton, 'primary')}
-                {renderButton(hero.secondaryButton, 'secondary')}
-              </div>
-            </>
+            </div>
           )}
         </div>
       </div>
