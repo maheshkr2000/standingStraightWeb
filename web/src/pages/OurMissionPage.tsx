@@ -181,21 +181,21 @@ const OurMissionPage = () => {
                     ? "opacity-0 pointer-events-none scale-95" 
                     : "opacity-100 pointer-events-auto scale-100"
                 } flex-col sm:flex-row lg:flex-col items-stretch lg:items-end lg:right-6`}>
-                  <a
-                    href="/donate"
+                    <a 
+                      href="/donate" 
                     className="inline-flex items-center justify-center gap-2 bg-warm-orange text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-warm-orange/90 hover:scale-105 transition-all duration-300"
-                  >
+                    >
                     <HandHeart className="w-5 h-5" />
                     <span>Support Our Mission</span>
-                  </a>
-                  <a
-                    href="/volunteers"
+                    </a>
+                    <a 
+                      href="/volunteers" 
                     className="inline-flex items-center justify-center gap-2 bg-white text-foreground border border-border px-6 py-3 rounded-full shadow-md hover:bg-soft-gray/30 hover:shadow-lg hover:scale-105 transition-all duration-300"
-                  >
+                    >
                     <Users className="w-5 h-5" />
                     <span>Volunteer With Us</span>
-                  </a>
-                </div>
+                    </a>
+                  </div>
               </div>
             </div>
           </div>
@@ -335,10 +335,10 @@ const OurMissionPage = () => {
               every child deserves quality healthcare—there's a place for you in our mission.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a 
+            <a 
                 href="/volunteers" 
                 className="inline-flex items-center justify-center bg-white text-trust-blue font-semibold px-8 py-3 rounded-xl hover:bg-white/90 hover:scale-105 transition-all duration-300 shadow-lg"
-              >
+            >
                 Volunteer With Us
               </a>
               <a 
