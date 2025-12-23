@@ -196,38 +196,48 @@ const MissionSnapshotCMS = () => {
           </div>
 
           {/* Impact Stats */}
-          <div className="bg-gradient-hero rounded-2xl p-8 text-primary-foreground">
-            <h3 className="text-2xl font-bold mb-8 text-center">Our Impact So Far</h3>
-            
-            {isLoading ? (
-              // Loading skeleton for stats
-              <div className="grid grid-cols-2 gap-6">
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="text-center">
-                    <div className="h-12 bg-white/20 rounded animate-pulse mb-2"></div>
-                    <div className="h-4 bg-white/20 rounded animate-pulse"></div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-6">
-                {data.impactHighlights?.slice(0, 4).map((highlight: MissionSnapshot['impactHighlights'][0], index: number) => (
-                  <div key={index} className="text-center">
-                    <AnimatedCounter 
-                      value={parseInt(highlight.value) || 0} 
-                      suffix={highlight.value.includes('%') ? '%' : (highlight.value.includes('+') ? '+' : '')}
-                      className="text-4xl font-bold mb-2"
-                    />
-                    <div className="text-primary-foreground/80">{highlight.metric}</div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="relative overflow-hidden rounded-3xl p-10 md:p-12 text-white bg-gradient-to-br from-sky-500 via-teal-500 to-emerald-500 shadow-xl">
+            <div className="absolute inset-0 opacity-25">
+              <div className="absolute -left-10 -top-10 h-48 w-48 rounded-full bg-white/20 blur-3xl" />
+              <div className="absolute right-0 bottom-0 h-56 w-56 rounded-full bg-white/15 blur-3xl" />
+            </div>
+            <div className="relative">
+              <h3 className="text-3xl md:text-4xl font-bold text-center">Our Impact So Far</h3>
 
-            <div className="mt-8 text-center">
-              <Button variant="outline" className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20">
-                View Our Reports
-              </Button>
+              {isLoading ? (
+                <div className="grid sm:grid-cols-3 gap-6 mt-10">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="text-center">
+                      <div className="h-10 bg-white/30 rounded animate-pulse mb-2"></div>
+                      <div className="h-4 bg-white/30 rounded animate-pulse"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="grid sm:grid-cols-3 gap-6 mt-10 text-center">
+                    <div className="p-4 rounded-2xl bg-white/10 backdrop-blur">
+                      <div className="text-3xl md:text-4xl font-bold">1000+</div>
+                      <div className="text-lg md:text-xl mt-1">Consultations</div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/10 backdrop-blur">
+                      <div className="text-3xl md:text-4xl font-bold">5000+</div>
+                      <div className="text-lg md:text-xl mt-1">Lives Impacted</div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/10 backdrop-blur">
+                      <div className="text-3xl md:text-4xl font-bold">150+</div>
+                      <div className="text-lg md:text-xl mt-1">Surgeries</div>
+                    </div>
+                  </div>
+
+                  <p className="mt-10 text-lg md:text-xl text-white/90 text-center max-w-4xl mx-auto">
+                    Every number tells a story. Every surgery changes a life.
+                  </p>
+                  <p className="mt-6 text-lg md:text-xl text-white/90 text-center max-w-5xl mx-auto">
+                    With over <span className="font-bold">150 life-changing spinal surgeries</span>, Standing Straight is turning pain into possibility – one child, one family, one future at a time.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
