@@ -3,6 +3,8 @@ export { default as MissionSnapshotCMS } from './MissionSnapshotCMS';
 export { default as PatientStoriesPreviewCMS } from './PatientStoriesPreviewCMS';
 export { default as UpcomingEventsPreviewCMS } from './UpcomingEventsPreviewCMS';
 export { default as StoriesEventsCTA } from './StoriesEventsCTA';
+export { default as FreeSurgeriesSection } from './FreeSurgeriesSection';
 export { default as HowYouCanHelpCMS } from './HowYouCanHelpCMS';
 export { default as PartnersCMS } from './PartnersCMS';
 export { default as GlobalFootprintCMS } from './GlobalFootprintCMS';
+
