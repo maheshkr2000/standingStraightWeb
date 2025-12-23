@@ -1,5 +1,5 @@
 import { Navigation, Footer } from "@/components/shared";
-import { HeroSectionCMS, MissionSnapshotCMS, StoriesEventsCTA, HowYouCanHelpCMS, PartnersCMS, GlobalFootprintCMS } from "@/components/cms";
+import { HeroSectionCMS, MissionSnapshotCMS, StoriesEventsCTA, FreeSurgeriesSection, HowYouCanHelpCMS, PartnersCMS, GlobalFootprintCMS } from "@/components/cms";
 
 const Index = () => {
   return (
@@ -9,6 +9,7 @@ const Index = () => {
         <HeroSectionCMS />
         <MissionSnapshotCMS />
         <StoriesEventsCTA />
+        <FreeSurgeriesSection />
         <HowYouCanHelpCMS />
         <PartnersCMS />
         <GlobalFootprintCMS />
