@@ -1,3 +1,4 @@
+import { useMemo, useRef, useState } from "react";
 import { Navigation, Footer } from "@/components/shared";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,11 @@ import {
 } from "lucide-react";
 
 const DonatePage = () => {
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const customSectionRef = useRef<HTMLDivElement | null>(null);
+
   const donationTiers = [
     {
       amount: 50,
@@ -84,6 +90,34 @@ const DonatePage = () => {
     { number: 50, label: "Medical Missions", suffix: "+" }
   ];
 
+  const activeAmount = useMemo(() => {
+    if (selectedAmount !== null) return selectedAmount;
+    const numeric = Number(customAmount);
+    return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
+  }, [selectedAmount, customAmount]);
+
+  const handleTierSelect = (amount: number) => {
+    setSelectedAmount(amount);
+    setCustomAmount(String(amount));
+    requestAnimationFrame(() => {
+      customSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
+  const handleCustomPreset = (amount: number) => {
+    setSelectedAmount(null);
+    setCustomAmount(String(amount));
+  };
+
+  const proceedToPayment = () => {
+    if (!activeAmount) {
+      alert("Please choose or enter a donation amount.");
+      return;
+    }
+    // Replace with payment gateway integration
+    console.log(`Processing donation of $${activeAmount} with comment: ${comment || "(no comment)"}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -139,8 +173,15 @@ const DonatePage = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {donationTiers.map((tier, index) => {
                 const IconComponent = tier.icon;
+                const isSelected = selectedAmount === tier.amount;
                 return (
-                  <Card key={index} className={`p-6 bg-card shadow-soft hover:shadow-card transition-bounce h-full relative ${tier.popular ? 'border-2 border-trust-blue' : ''}`}>
+                  <Card
+                    key={index}
+                    onClick={() => handleTierSelect(tier.amount)}
+                    className={`p-6 bg-card shadow-soft hover:shadow-card transition-bounce h-full relative cursor-pointer ${
+                      tier.popular ? "border-2 border-trust-blue" : ""
+                    } ${isSelected ? "ring-2 ring-trust-blue border-trust-blue" : ""}`}
+                  >
                     {tier.popular && (
                       <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-trust-blue text-white">
                         Most Popular
@@ -156,10 +197,10 @@ const DonatePage = () => {
                       <div className="bg-soft-gray rounded-lg p-3 mb-6">
                         <p className="text-sm text-medical-teal font-medium">{tier.impact}</p>
                       </div>
-                      <Button 
-                        variant={tier.popular ? "donate" : "story"} 
+                      <Button
+                        variant={tier.popular ? "donate" : "story"}
                         className="w-full"
-                        onClick={() => handleDonation(tier.amount)}
+                        onClick={() => handleTierSelect(tier.amount)}
                       >
                         Donate ${tier.amount}
                       </Button>
@@ -172,7 +213,7 @@ const DonatePage = () => {
         </section>
 
         {/* Custom Amount Section */}
-        <section className="py-20 bg-soft-gray">
+        <section className="py-20 bg-soft-gray" ref={customSectionRef}>
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-6">Custom Donation Amount</h2>
@@ -193,12 +234,27 @@ const DonatePage = () => {
                         placeholder="Enter amount"
                         className="flex-1 outline-none text-lg font-medium"
                         min="1"
+                        value={customAmount}
+                        onChange={(e) => {
+                          setCustomAmount(e.target.value);
+                          setSelectedAmount(null);
+                        }}
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => setCustomAmount(25)}>$25</Button>
-                      <Button variant="outline" size="sm" onClick={() => setCustomAmount(100)}>$100</Button>
-                      <Button variant="outline" size="sm" onClick={() => setCustomAmount(500)}>$500</Button>
+                      <Button variant="outline" size="sm" onClick={() => handleCustomPreset(25)}>$25</Button>
+                      <Button variant="outline" size="sm" onClick={() => handleCustomPreset(100)}>$100</Button>
+                      <Button variant="outline" size="sm" onClick={() => handleCustomPreset(500)}>$500</Button>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Comments (optional)</label>
+                      <textarea
+                        className="w-full border rounded-lg p-3 text-sm outline-none focus:ring-2 focus:ring-trust-blue"
+                        rows={3}
+                        placeholder="Add a note with your donation"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -226,7 +282,12 @@ const DonatePage = () => {
               </div>
 
               <div className="mt-8 text-center">
-                <Button variant="donate" size="lg" className="px-8 py-4 text-lg">
+                <Button
+                  variant="donate"
+                  size="lg"
+                  className="px-8 py-4 text-lg"
+                  onClick={proceedToPayment}
+                >
                   Proceed to Payment
                 </Button>
               </div>

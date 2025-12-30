@@ -1,11 +1,15 @@
+import { useMemo } from "react";
 import { Navigation, Footer, AnimatedCounter } from "@/components/shared";
 import { Card } from "@/components/ui/card";
 import { HandHeart, Heart, Users, Stethoscope, Award, MapPin, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import heroMissionImage from "@/assets/hero-child-surgery.jpg";
+import { useHeroSection } from "@/hooks/useSanityData";
+import { urlFor } from "@/lib/sanity";
 
 const OurMissionPage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { data: heroData } = useHeroSection();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,35 +149,42 @@ const OurMissionPage = () => {
     }
   ];
 
+  const heroImageUrl = useMemo(() => {
+    const slide = heroData?.slides?.[1] || heroData?.slides?.[0];
+    const sanityUrl = slide?.image?.asset?._ref ? urlFor(slide.image).width(1920).quality(80).url() : null;
+    return sanityUrl || "/Homepage/T-7.jpg";
+  }, [heroData]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="relative py-32 overflow-hidden">
+        <section className="relative overflow-hidden min-h-[80vh] flex items-center py-24 md:py-32">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
             style={{
-              backgroundImage: `url(${heroMissionImage})`
+              backgroundImage: `url(${heroImageUrl})`
             }}
           ></div>
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/60"></div>
           <div className="relative max-w-7xl mx-auto px-6">
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               <div className="text-center lg:text-left">
                 <div className="inline-block bg-white/10 backdrop-blur-sm rounded-full px-6 py-2 mb-6">
                   <span className="text-white/90 font-medium">Transforming Lives Since 2010</span>
                 </div>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                  Every Child 
-                  <span className="block bg-gradient-to-r from-warm-orange to-medical-teal bg-clip-text text-transparent">
-                    Deserves to Stand Straight
-                  </span>
-                </h1>
-                <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-                  Providing world-class orthopedic and spine deformity care to impoverished children 
-                  and young adults in developing countries.
-                </p>
+                <div className="inline-block text-left">
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+                    <span className="block text-white">
+                      Every Child
+                    </span>
+                    <span className="block bg-gradient-hero bg-clip-text text-transparent">
+                      Deserves to Stand Straight
+                    </span>
+                  </h1>
+                  {/* Subheading intentionally hidden as requested */}
+                </div>
               </div>
               <div className="relative flex justify-center lg:justify-end">
                 <div className={`flex gap-3 lg:fixed lg:top-24 lg:z-30 transition-all duration-500 ease-in-out ${

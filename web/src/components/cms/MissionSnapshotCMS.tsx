@@ -25,9 +25,9 @@ const MissionSnapshotCMS = () => {
 
   // Fallback data for when CMS is not available
   const fallbackData: MissionSnapshot = {
-    title: "Why We Exist",
-    description: "Every Child Deserves to Stand Straight and be able to lead a normal and productive live. We deliver life-changing spinal surgeries and train local medical teams to create lasting impact in underserved communities.",
-    missionStatement: "Every Child Deserves to Stand Straight and be able to lead a normal and productive live. We deliver life-changing spinal surgeries and train local medical teams to create lasting impact in underserved communities.",
+    title: "How We Create Change",
+    description: "From first consultation to life-changing surgery, our process turns hope into healing for children who need it most.",
+    missionStatement: "From first consultation to life-changing surgery, our process turns hope into healing for children who need it most.",
     statistics: {
       surgeriesPerformed: 500,
       childrenHelped: 500,
@@ -131,7 +131,7 @@ const MissionSnapshotCMS = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            {data.title || "Why We Exist"}
+            {data.title || "How We Create Change"}
           </h2>
           <p className="text-xl text-text-gray max-w-3xl mx-auto">
             {data.missionStatement || data.description}

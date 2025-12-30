@@ -130,7 +130,13 @@ const UpcomingEventsPage = () => {
     }
   ];
 
-  const roleOptions = ["Orthopedic Spine Surgeons", "Operating Room Spine Techs", "Operating Room Spine Nurses", "Neuro Physiologist"];
+  const roleOptions = [
+    "Spine surgeons",
+    "OR spine techs",
+    "OR spine nurses",
+    "Neurophysiologists",
+    "Anesthesiologists / CRNAs",
+  ];
 
   const [isApplyOpen, setIsApplyOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
@@ -138,9 +144,9 @@ const UpcomingEventsPage = () => {
     name: "",
     email: "",
     phone: "",
-    role: roleOptions[0],
-    location: ""
+    role: ""
   });
+  const [roleError, setRoleError] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
   const [showAllPast, setShowAllPast] = useState(false);
 
@@ -223,8 +229,14 @@ const UpcomingEventsPage = () => {
     };
   }, [currentSlide, goToSlide, filteredUpcomingEvents.length]);
 
-  const openApplication = (eventTitle: string) => {
-    setSelectedEvent(eventTitle);
+  const openApplication = (event: typeof upcomingEvents[number]) => {
+    setSelectedEvent(event.title);
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      role: "",
+    });
     setIsApplyOpen(true);
   };
 
@@ -234,20 +246,24 @@ const UpcomingEventsPage = () => {
       name: "",
       email: "",
       phone: "",
-      role: roleOptions[0],
-      location: ""
+      role: "",
     });
+    setRoleError(false);
   };
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!formData.role) {
+      setRoleError(true);
+      return;
+    }
+    setRoleError(false);
     const body = [
       `Event: ${selectedEvent ?? "StandingStraight Event"}`,
       `Name: ${formData.name}`,
       `Email: ${formData.email}`,
       `Phone: ${formData.phone}`,
-      `Role: ${formData.role}`,
-      `Location: ${formData.location}`
+      `Role: ${formData.role}`
     ].join("\n");
 
     window.location.href = `mailto:missions@standingstraight.org?subject=${encodeURIComponent(
@@ -378,7 +394,7 @@ const UpcomingEventsPage = () => {
                                   <Button
                                     variant="outline"
                                     className="w-full md:w-auto md:px-10 rounded-full tracking-[0.2em] uppercase text-[11px] border-0 bg-warm-orange text-white shadow-[0_12px_30px_rgba(249,115,22,0.45)] hover:bg-warm-orange/90 hover:translate-y-[1px] transition-all"
-                                    onClick={() => openApplication(event.title)}
+                                    onClick={() => openApplication(event)}
                                   >
                                     Apply Now
                                   </Button>
@@ -664,13 +680,18 @@ const UpcomingEventsPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>Role</Label>
+              <Label>
+                Role <span className="text-red-500">*</span>
+              </Label>
               <Select
                 required
                 value={formData.role}
-                onValueChange={(value) => setFormData({ ...formData, role: value })}
+                onValueChange={(value) => {
+                  setFormData({ ...formData, role: value });
+                  setRoleError(false);
+                }}
               >
-                <SelectTrigger>
+                <SelectTrigger className={roleError ? "border-red-500 focus:ring-red-500" : ""}>
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -681,17 +702,9 @@ const UpcomingEventsPage = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                required
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="City, Country"
-              />
+              {roleError && (
+                <p className="text-sm text-red-600">Please select your role.</p>
+              )}
             </div>
 
             <DialogFooter className="flex flex-col gap-3 sm:flex-row sm:justify-end">

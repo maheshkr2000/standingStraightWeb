@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Navigation, Footer } from "@/components/shared";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +9,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MapPin, Mail } from "lucide-react";
+import { useTeamMembers } from "@/hooks/useSanityData";
+import { urlFor } from "@/lib/sanity";
+import type { TeamMember as SanityTeamMember } from "@/lib/sanity";
 
 type TeamMember = {
   name: string;
   title: string;
   email?: string;
   photo: string;
+  photoAlt?: string;
   location: string;
   specialty: string;
   summary: string;
@@ -22,7 +26,8 @@ type TeamMember = {
   focusAreas?: string[];
 };
 
-const boardMembers: TeamMember[] = [
+// Public/static fallback data when CMS is unavailable
+const fallbackMembers: TeamMember[] = [
   {
     name: "Ravi S. Bains, MD",
     title: "Chairman & CEO",
@@ -60,20 +65,29 @@ const boardMembers: TeamMember[] = [
     focusAreas: ["Pediatric care", "Surgical training", "Mission work"],
   },
   {
-    name: "Todd Lincoln, MD",
-    title: "Director",
-    email: "",
-    photo: "/team/4.png",
+    name: "Sukhraj Bains",
+    title: "President",
+    email: "raj@standingstraight.org",
+    photo: "/team/7.png",
     summary:
-      "Pediatric orthopedic specialist focused on scoliosis and complex hip care.",
-    bio: "Dr. Lincoln specializes in scoliosis, pediatric orthopedics, and complex hip deformity. He has experience in treating the full range of musculoskeletal problems that can arise during infancy, childhood, and adolescence. He developed the hip preservation services specializing in complex hip reconstructions such as periacetabular osteotomy (PAO) surgery and surgical hip dislocation surgery for both adolescents and adults. Dr. Lincoln has volunteered his time each year to help children in Central and South America who lack adequate resources for their care.",
+      "Founding member with 5+ years of database and project management experience; leads organizational operations.",
+    bio: "A founding member of Standing Straight, Sukhraj Bains has over five years of database and project management experience. Currently a medical student at the Keck School of Medicine of USC, he has organized various community service and social networking projects for multiple non-profit companies and local city government. Bains has also volunteered in several pediatric orthopedic medical missions in Central America, serving as a Spanish Translator and physician assistant in pre-op and post-op care of patients.",
     location: "California, USA",
-    specialty: "Pediatric Orthopedics & Scoliosis",
-    focusAreas: ["Scoliosis", "Hip preservation", "Global health"],
+    specialty: "Operations & Mission Support",
+    focusAreas: ["Project management", "Community outreach", "Mission logistics"],
   },
-];
-
-const advisors: TeamMember[] = [
+  {
+    name: "Nirmal Singh, MSc, D.ABNM",
+    title: "Mission Coordinator",
+    email: "",
+    photo: "/team/8.avif",
+    summary:
+      "Leads neurophysiology teams improving outcomes in complex spine and pediatric neurosurgery.",
+    bio: "Nirmal Singh moved to the US in 2003 after completing his graduation from India and post graduation from Canada. With 10 years of experience in spinal cord and brain function monitoring he joined Kaiser Permanente in 2012. Currently he leads a team of neurophysiologists who helps improve surgical outcome of complex spine and pediatric Neurosurgery.",
+    location: "California, USA",
+    specialty: "Neurophysiology & Surgical Monitoring",
+    focusAreas: ["Intraoperative monitoring", "Team leadership", "Surgical outcomes"],
+  },
   {
     name: "Vikas Verma",
     title: "Advisor",
@@ -86,22 +100,44 @@ const advisors: TeamMember[] = [
     specialty: "IT Professional & Entrepreneur",
     focusAreas: ["Strategy", "Technology enablement"],
   },
-  {
-    name: "Doug Yim, MD",
-    title: "Executive Advisor",
-    email: "",
-    photo: "/team/6.png",
-    summary:
-      "Interventional radiology leader advancing minimally invasive treatments for complex spine and trauma care.",
-    bio: "Dr. Doug Yim is the director of Interventional Radiology Residency at Johns Hopkins and past Chief/Associate Clinical Professor at UCI Medical Center. He has served as Chief of Interventional Radiology at the National Naval Medical Center treating wounded warriors, and as Director at Emory University where he developed minimally invasive image-guided techniques for spine tumors.",
-    location: "Maryland, USA",
-    specialty: "Interventional Radiology & Spine Oncology",
-    focusAreas: ["Image-guided therapy", "Spine tumors", "Residency leadership"],
-  },
 ];
 
 const OurTeamPage = () => {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const { data, isLoading, error } = useTeamMembers();
+
+  const members: TeamMember[] = useMemo(() => {
+    const cmsMembers = Array.isArray(data) ? data : [];
+
+    if (!cmsMembers.length || error) {
+      return fallbackMembers;
+    }
+
+    const toDisplayMember = (member: SanityTeamMember): TeamMember => {
+      const location = [member.location?.city, member.location?.country]
+        .filter(Boolean)
+        .join(", ");
+      const photoUrl =
+        member.photo?.asset?._ref
+          ? urlFor(member.photo).width(800).height(800).quality(80).url()
+          : "/placeholder.svg";
+
+      return {
+        name: member.name,
+        title: member.title,
+        email: member.email || "",
+        photo: photoUrl,
+        photoAlt: member.photo?.alt || member.name,
+        location: location || "Global",
+        specialty: member.specialization || member.role || "Team Member",
+        summary: member.bio || "",
+        bio: member.bio || "",
+        focusAreas: member.languages,
+      };
+    };
+
+    return cmsMembers.map(toDisplayMember);
+  }, [data, error]);
 
   const MemberCard = ({
     member,
@@ -132,8 +168,9 @@ const OurTeamPage = () => {
           >
             <img
               src={member.photo}
-              alt={member.name}
+              alt={member.photoAlt || member.name}
               className="w-full h-full object-cover scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 ring-2 ring-sky-200/70 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
@@ -199,17 +236,6 @@ const OurTeamPage = () => {
               Experts and mission-driven leaders creating lasting global impact.
             </p>
 
-            <div className="mt-6 flex justify-center gap-3 text-sm text-white/80">
-              <span className="px-3 py-1 rounded-full border border-white/20">
-                Board leadership
-              </span>
-              <span className="px-3 py-1 rounded-full border border-white/20">
-                Advisors
-              </span>
-              <span className="px-3 py-1 rounded-full border border-white/20">
-                Global missions
-              </span>
-            </div>
           </div>
         </section>
 
@@ -230,38 +256,23 @@ const OurTeamPage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
-              {boardMembers.map((member) => (
-                <MemberCard key={member.name} member={member} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Advisors */}
-        <section className="py-12 md:py-14 bg-[#F3F7F6]">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-8 md:mb-10 space-y-2">
-              <p className="text-sm font-semibold text-medical-teal">
-                Guidance & Oversight
-              </p>
-              <h2 className="text-3xl md:text-4xl font-semibold text-gray-800">
-                Our Advisors
-              </h2>
-
-              <p className="mt-2 text-gray-600 max-w-xl mx-auto">
-                Supporting our mission with specialized expertise and guidance.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
-              {advisors.map((advisor) => (
-                <MemberCard
-                  key={advisor.name}
-                  member={advisor}
-                  orientation="horizontal"
-                />
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
+              {isLoading && members === fallbackMembers ? (
+                Array.from({ length: 6 }).map((_, idx) => (
+                  <Card
+                    key={idx}
+                    className="w-full max-w-xs p-6 bg-white shadow-md border border-slate-200 rounded-2xl animate-pulse"
+                  >
+                    <div className="w-24 h-24 mx-auto rounded-full bg-slate-200 mb-4" />
+                    <div className="h-4 bg-slate-200 rounded w-3/4 mx-auto mb-2" />
+                    <div className="h-3 bg-slate-200 rounded w-1/2 mx-auto mb-4" />
+                    <div className="h-3 bg-slate-200 rounded w-full mb-2" />
+                    <div className="h-3 bg-slate-200 rounded w-5/6 mx-auto" />
+                  </Card>
+                ))
+              ) : (
+                members.map((member) => <MemberCard key={member.name} member={member} />)
+              )}
             </div>
           </div>
         </section>
