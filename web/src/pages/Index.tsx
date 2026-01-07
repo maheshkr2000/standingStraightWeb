@@ -8,8 +8,8 @@ const Index = () => {
       <main>
         <HeroSectionCMS />
         <MissionSnapshotCMS />
-        <StoriesEventsCTA />
         <FreeSurgeriesSection />
+        <StoriesEventsCTA />
         <HowYouCanHelpCMS />
         <PartnersCMS />
         <GlobalFootprintCMS />

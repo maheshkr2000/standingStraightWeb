@@ -106,47 +106,61 @@ const HeroSectionCMS = () => {
       <div className="absolute inset-0 z-0">
         <Carousel opts={{ loop: true }} setApi={setApi} className="h-full">
           <CarouselContent className="h-full">
-            {hero.slides?.map((slide, index) => (
-              <CarouselItem key={index} className="h-full relative">
-                <div className="absolute inset-0">
-                  {slide.image?.asset?._ref && slide.image.asset._ref.startsWith('image-') ? (
-                    <img 
-                      src={(() => {
-                        try {
-                          return urlFor(slide.image).width(1920).quality(80).url()
-                        } catch (error) {
-                          console.warn('Error generating image URL:', error)
-                          return ''
-                        }
-                      })()}
-                      srcSet={(() => {
-                        try {
-                          return [
-                            `${urlFor(slide.image).width(640).quality(80).url()} 640w`,
-                            `${urlFor(slide.image).width(1024).quality(80).url()} 1024w`,
-                            `${urlFor(slide.image).width(1440).quality(80).url()} 1440w`,
-                            `${urlFor(slide.image).width(1920).quality(80).url()} 1920w`,
-                            `${urlFor(slide.image).width(2560).quality(80).url()} 2560w`
-                          ].join(', ');
-                        } catch (error) {
-                          console.warn('Error generating srcSet:', error)
-                          return '';
-                        }
-                      })()}
-                      sizes="100vw"
-                      alt={slide.image.alt || `Hero slide ${index + 1}`}
-                      className="w-full h-full object-cover object-center"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.visibility = 'hidden';
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-trust-blue to-medical-teal" />
-                  )}
-                </div>
-              </CarouselItem>
-            ))}
+             {hero.slides?.map((slide, index) => (
+               <CarouselItem key={index} className="h-full relative overflow-hidden">
+                 <div className="absolute inset-0">
+                   {slide.image?.asset?._ref && slide.image.asset._ref.startsWith('image-') ? (() => {
+                     let baseUrl = "";
+                     try {
+                       baseUrl = urlFor(slide.image).width(1920).quality(80).url();
+                     } catch (error) {
+                       console.warn('Error generating image URL:', error);
+                     }
+
+                     const srcSet = (() => {
+                       try {
+                         return [
+                           `${urlFor(slide.image).width(640).quality(80).url()} 640w`,
+                           `${urlFor(slide.image).width(1024).quality(80).url()} 1024w`,
+                           `${urlFor(slide.image).width(1440).quality(80).url()} 1440w`,
+                           `${urlFor(slide.image).width(1920).quality(80).url()} 1920w`,
+                           `${urlFor(slide.image).width(2560).quality(80).url()} 2560w`
+                         ].join(', ');
+                       } catch (error) {
+                         console.warn('Error generating srcSet:', error);
+                         return "";
+                       }
+                     })();
+
+                     return (
+                       <>
+                         {/* Blurred backdrop to fill gray bars while keeping main image contained */}
+                         {baseUrl && (
+                           <div
+                             aria-hidden
+                             className="absolute inset-0 bg-center bg-cover bg-no-repeat scale-105 blur-lg opacity-60"
+                             style={{ backgroundImage: `url(${baseUrl})` }}
+                           />
+                         )}
+                         <img 
+                           src={baseUrl}
+                           srcSet={srcSet}
+                           sizes="100vw"
+                           alt={slide.image.alt || `Hero slide ${index + 1}`}
+                           className="relative w-full h-full object-cover sm:object-cover lg:object-contain"
+                           onError={(e) => {
+                             const target = e.target as HTMLImageElement;
+                             target.style.visibility = 'hidden';
+                           }}
+                         />
+                       </>
+                     );
+                   })() : (
+                     <div className="w-full h-full bg-gradient-to-br from-trust-blue to-medical-teal" />
+                   )}
+                 </div>
+               </CarouselItem>
+             ))}
           </CarouselContent>
         </Carousel>
         

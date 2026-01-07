@@ -98,7 +98,7 @@ const GlobalFootprintCMS = () => {
                   </div>
                   <div className="bg-card/90 backdrop-blur-sm rounded-lg p-3 text-center">
                     <div className="text-2xl font-bold text-trust-blue">
-                      {statistics?.partnerHospitals || "0+"}
+                      {statistics?.partnerHospitalsText || "Multiple Renowned Hospitals"}
                     </div>
                     <div className="text-sm text-text-gray">Partner Hospitals</div>
                   </div>
@@ -152,9 +152,9 @@ const GlobalFootprintCMS = () => {
                 United States Office
               </h4>
               <div className="space-y-2 text-text-gray">
-                <p>San Francisco, California</p>
-                <p>Email: usa@standingstraight.org</p>
-                <p>Phone: +1 (555) 123-4567</p>
+                <p>21C Orinda Way, Suite #267, Orinda, CA 94563</p>
+                <p>Email: standingstraight@standingstraight.org</p>
+                <p>Phone: 925 900-3451</p>
               </div>
             </Card>
 
@@ -164,9 +164,8 @@ const GlobalFootprintCMS = () => {
                 India Office
               </h4>
               <div className="space-y-2 text-text-gray">
-                <p>Mumbai, Maharashtra</p>
-                <p>Email: india@standingstraight.org</p>
-                <p>Phone: +91 22 1234 5678</p>
+                <p>Standing Straight Welfare Society, 1st Floor, Akal Metal Works, Lamba Pind, G.T Road, Bye Pass, Jalandhar</p>
+                <p>Email: standingstraight@standingstraight.org</p>
               </div>
             </Card>
           </div>

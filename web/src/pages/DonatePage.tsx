@@ -198,7 +198,7 @@ const DonatePage = () => {
                         <p className="text-sm text-medical-teal font-medium">{tier.impact}</p>
                       </div>
                       <Button
-                        variant={tier.popular ? "donate" : "story"}
+                        variant="donate"
                         className="w-full"
                         onClick={() => handleTierSelect(tier.amount)}
                       >

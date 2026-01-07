@@ -10,21 +10,20 @@ const ContactPage = () => {
   const offices = [
     {
       country: "United States",
-      city: "San Francisco, California",
-      address: "123 Medical Center Drive, Suite 456",
-      zipCode: "CA 94102",
-      email: "usa@standingstraight.org",
-      phone: "+1 (555) 123-4567",
+      city: "Orinda, California",
+      address: "21C Orinda Way, Suite #267",
+      zipCode: "Orinda, CA 94563",
+      email: "standingstraight@standingstraight.org",
+      phone: "925 900-3451",
       hours: "Mon-Fri 9AM-5PM PST",
       icon: Building
     },
     {
       country: "India",
-      city: "Mumbai, Maharashtra",
-      address: "456 Healthcare Avenue, Medical District",
-      zipCode: "Mumbai 400001",
-      email: "india@standingstraight.org",
-      phone: "+91 22 1234 5678",
+      city: "Jalandhar, Punjab",
+      address: "Standing Straight Welfare Society, 1st Floor, Akal Metal Works, Lamba Pind, G.T Road, Bye Pass",
+      zipCode: "Jalandhar",
+      email: "standingstraight@standingstraight.org",
       hours: "Mon-Fri 9AM-6PM IST",
       icon: Users
     }
@@ -120,12 +119,14 @@ const ContactPage = () => {
                         </a>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <Phone className="w-5 h-5 text-trust-blue" />
-                        <a href={`tel:${office.phone}`} className="text-text-gray hover:text-trust-blue transition-colors">
-                          {office.phone}
-                        </a>
-                      </div>
+                      {office.phone && (
+                        <div className="flex items-center gap-3">
+                          <Phone className="w-5 h-5 text-trust-blue" />
+                          <a href={`tel:${office.phone}`} className="text-text-gray hover:text-trust-blue transition-colors">
+                            {office.phone}
+                          </a>
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-3">
                         <Clock className="w-5 h-5 text-trust-blue" />
