@@ -101,7 +101,7 @@ const HeroSectionCMS = () => {
   }
 
   return (
-    <section className="relative h-[100svh] flex items-stretch overflow-hidden">
+    <section className="relative min-h-screen h-[100svh] flex items-stretch overflow-hidden">
       {/* Background Slideshow */}
       <div className="absolute inset-0 z-0">
         <Carousel opts={{ loop: true }} setApi={setApi} className="h-full">
@@ -147,7 +147,7 @@ const HeroSectionCMS = () => {
                            srcSet={srcSet}
                            sizes="100vw"
                            alt={slide.image.alt || `Hero slide ${index + 1}`}
-                           className="relative w-full h-full object-cover sm:object-cover lg:object-contain"
+                           className="relative w-full h-full object-contain mt-14"
                            onError={(e) => {
                              const target = e.target as HTMLImageElement;
                              target.style.visibility = 'hidden';
@@ -189,8 +189,8 @@ const HeroSectionCMS = () => {
       </div>
       
       {/* Content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full h-full flex items-center pt-20 md:pt-24">
-        <div className="text-center lg:text-left w-full mt-16 md:mt-20">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full h-full flex items-start pt-32 md:pt-40 lg:pt-44 pb-12">
+        <div className="text-center lg:text-left w-full mt-6 md:mt-10">
           {/* Loading state */}
           {isLoading ? (
             <div className="animate-pulse">
