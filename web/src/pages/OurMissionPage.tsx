@@ -150,7 +150,7 @@ const OurMissionPage = () => {
   ];
 
   const heroImageUrl = useMemo(() => {
-    const slide = heroData?.slides?.[1] || heroData?.slides?.[0];
+    const slide = heroData?.slides?.[5] || heroData?.slides?.[0];
     const sanityUrl = slide?.image?.asset?._ref ? urlFor(slide.image).width(1920).quality(80).url() : null;
     return sanityUrl || "/Homepage/T-7.jpg";
   }, [heroData]);
