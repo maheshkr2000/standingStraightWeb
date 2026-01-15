@@ -79,40 +79,70 @@ const OurMissionPage = () => {
 
   const timeline = [
     {
-      year: "2010",
-      title: "Foundation Established",
-      description: "Dr. Sarah Johnson founded StandingStraight after witnessing the lack of accessible pediatric spine care in rural India.",
-      milestone: "First mission to Mumbai"
+      year: "2008 - 2015",
+      title: "Early Years",
+      description: "Dr. Bains performed spine surgeries across Central America, South America, the Caribbean, and Kenya with charitable groups.",
+      milestone: "Global charitable missions"
     },
     {
-      year: "2012", 
-      title: "First Training Program",
-      description: "Launched our medical education initiative, training 15 local surgeons in advanced pediatric spine techniques.",
-      milestone: "50 surgeries completed"
+      year: "2012",
+      title: "Lessons From the Field",
+      description: "A suboptimal mission trip highlighted the need for a dedicated, standards-driven spine mission program.",
+      milestone: "Blueprint for change"
+    },
+    {
+      year: "2013",
+      title: "Standing Straight Founded",
+      description: "Established Standing Straight to deliver consistent, high-quality spinal deformity care on missions.",
+      milestone: "Organization launched"
+    },
+    {
+      year: "2013 - 2015",
+      title: "North India Hospital Visits",
+      description: "Multiple visitations in North India; developed a spine surgery checklist and requirements for safe missions.",
+      milestone: "Clinical standards built"
     },
     {
       year: "2015",
-      title: "Expansion to Multiple Countries",
-      description: "Extended operations to Bangladesh, Nepal, and Mexico, adapting our model to diverse healthcare systems.",
-      milestone: "200 lives transformed"
+      title: "First Mission at SGL Hospital",
+      description: "Screened 40+ patients and performed 6 surgeries with a 20-specialist team at SGL Hospital, Jalandhar.",
+      milestone: "Inaugural mission success"
+    },
+    {
+      year: "2017",
+      title: "Biannual Missions Begin",
+      description: "Increased cadence to biannual trips to meet growing demand for complex spinal surgeries.",
+      milestone: "Twice-yearly missions"
     },
     {
       year: "2018",
-      title: "Technology Integration",
-      description: "Introduced telemedicine consultations and digital training platforms to scale our educational impact.",
-      milestone: "100 doctors trained"
+      title: "AIIMS Delhi Invitation",
+      description: "Invited by AIIMS, Delhi to present and assist in scoliosis surgery, sharing techniques with national leaders.",
+      milestone: "National collaboration"
     },
     {
-      year: "2020",
-      title: "Pandemic Response",
-      description: "Adapted operations for COVID-19 safety while maintaining critical surgical services and expanding virtual training.",
-      milestone: "Continuous care maintained"
+      year: "2019",
+      title: "UK Partnership & Joint Missions",
+      description: "Partnered with Dr. Am Rai (Spine AID, UK); joint deformity surgeries at PGI Chandigarh and SGL Jalandhar.",
+      milestone: "International co-ops"
     },
     {
-      year: "2023",
-      title: "500th Surgery Milestone",
-      description: "Reached our 500th successful surgery, with 98% success rate and comprehensive follow-up care for all patients.",
-      milestone: "Global recognition"
+      year: "2020 - 2022",
+      title: "Pandemic Pause",
+      description: "Mission trips were paused due to COVID-19; planning and safety protocols strengthened during downtime.",
+      milestone: "Programs on hold"
+    },
+    {
+      year: "Nov 2022",
+      title: "Missions Resume",
+      description: "Returned to the field, restarting surgical missions and patient follow-ups.",
+      milestone: "Fieldwork reactivated"
+    },
+    {
+      year: "Mar 2025",
+      title: "Second Site Added",
+      description: "Launched a second site at Krishna Vishal Vidyapeeth University, Karad, Maharashtra to expand reach.",
+      milestone: "New center opened"
     }
   ];
 
@@ -160,14 +190,33 @@ const OurMissionPage = () => {
       <Navigation />
       <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden min-h-[80vh] flex items-center py-24 md:py-32">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+        <section className="relative overflow-hidden min-h-[90vh] flex items-center py-24 md:py-32 bg-[#0c1420]">
+          {/* Left color fill matched to image tones */}
+          <div className="absolute inset-0 bg-[#0c1420]" aria-hidden />
+
+          {/* Right image fill */}
+          <div
+            className="absolute inset-y-0 right-0 w-full lg:w-[55%]"
             style={{
-              backgroundImage: `url(${heroImageUrl})`
+              backgroundImage: `url(${heroImageUrl})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+              backgroundSize: "cover",
+              backgroundColor: "rgba(12,20,32,0.5)"
             }}
-          ></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/60"></div>
+            aria-hidden
+          />
+
+          {/* Gradient overlays for blending and readability */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(90deg, rgba(12,20,32,0.92) 0%, rgba(12,20,32,0.88) 32%, rgba(12,20,32,0.72) 52%, rgba(12,20,32,0.35) 70%, rgba(12,20,32,0.0) 85%)"
+            }}
+            aria-hidden
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-[#0c1420]/65" aria-hidden />
+
           <div className="relative max-w-7xl mx-auto px-6">
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               <div className="text-center lg:text-left">
