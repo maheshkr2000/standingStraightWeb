@@ -3,8 +3,8 @@ import imageUrlBuilder from '@sanity/image-url'
 
 // Sanity client configuration
 export const client = createClient({
-  projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
-  dataset: import.meta.env.VITE_SANITY_DATASET,
+     projectId: 'wfeqwe3v',
+  dataset: 'production',
   apiVersion: '2023-05-03',
   useCdn: true,
   // No token needed for public read access
@@ -117,6 +117,12 @@ export const queries = {
     afterSurgeryImages[],
     beforeImages[],
     afterImages[],
+    videoUrl,
+    video{
+      url,
+      asset->{url},
+      file{asset->{url}}
+    },
     isFeatured,
     "surgeon": surgeryDetails.surgeon->{name, title}
   }`,
@@ -135,7 +141,13 @@ export const queries = {
     beforeSurgeryImages[],
     afterSurgeryImages[],
     beforeImages[],
-    afterImages[]
+    afterImages[],
+    videoUrl,
+    video{
+      url,
+      asset->{url},
+      file{asset->{url}}
+    }
   }`,
 
   // Team Members
