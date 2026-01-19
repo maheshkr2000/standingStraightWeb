@@ -196,7 +196,7 @@ const OurMissionPage = () => {
 
           {/* Right image fill */}
           <div
-            className="absolute inset-y-0 right-0 w-full lg:w-[55%]"
+            className="absolute inset-0 w-full"
             style={{
               backgroundImage: `url(${heroImageUrl})`,
               backgroundRepeat: "no-repeat",

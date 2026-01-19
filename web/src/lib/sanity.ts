@@ -113,6 +113,10 @@ export const queries = {
     summary,
     outcome,
     featuredImage,
+    beforeSurgeryImages[],
+    afterSurgeryImages[],
+    beforeImages[],
+    afterImages[],
     isFeatured,
     "surgeon": surgeryDetails.surgeon->{name, title}
   }`,
@@ -127,7 +131,11 @@ export const queries = {
     location,
     summary,
     featuredImage,
-    outcome
+    outcome,
+    beforeSurgeryImages[],
+    afterSurgeryImages[],
+    beforeImages[],
+    afterImages[]
   }`,
 
   // Team Members

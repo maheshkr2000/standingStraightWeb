@@ -10,17 +10,65 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, ArrowRight, MapPin } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useFeaturedStories, usePatientStories } from "@/hooks/useSanityData";
+import { urlFor } from "@/lib/sanity";
+
+type Story = {
+  name: string;
+  age?: number;
+  condition?: string;
+  treatment?: string;
+  location?: string;
+  story: string;
+  image?: string;
+  gallery?: string[];
+  hasBeforeAfter?: boolean;
+  beforeImage?: string;
+  afterImage?: string;
+  year?: string;
+  videoUrl?: string;
+};
+
+type SanityImage = { _type: "image"; asset: { _type: "reference"; _ref: string } };
+type SanityImageRef = { _type?: string; asset?: { _type?: string; _ref?: string } };
+
+type CmsStory = {
+  featuredImage?: SanityImageRef;
+  beforeImage?: SanityImageRef;
+  afterImage?: SanityImageRef;
+  gallery?: SanityImageRef[];
+  images?: SanityImageRef[];
+  beforeSurgeryImages?: SanityImageRef[];
+  afterSurgeryImages?: SanityImageRef[];
+  beforeImages?: SanityImageRef[];
+  afterImages?: SanityImageRef[];
+  patientName?: string;
+  title?: string;
+  age?: number;
+  condition?: string;
+  location?: string | { city?: string; country?: string };
+  missionDate?: string;
+  summary?: string;
+  outcome?: string;
+};
 
 const SuccessStories = () => {
+  const { data: cmsFeatured } = useFeaturedStories();
+  const { data: cmsStories } = usePatientStories();
   const [currentCarouselSlide, setCurrentCarouselSlide] = useState(0);
   const [showAllStories, setShowAllStories] = useState(false);
   const [expandedStory, setExpandedStory] = useState<number | null>(null);
   const [selectedStory, setSelectedStory] = useState<number | null>(null);
   const [activeMedia, setActiveMedia] = useState<string | null>(null);
+  // default to mobile to avoid peeking on first paint; effect will update
+  const [isMobile, setIsMobile] = useState(true);
+  const slideWidthPercent = isMobile ? 100 : 70; // mobile full width, desktop shows peeks
+  const slidePeekOffset = isMobile ? 0 : (100 - slideWidthPercent) / 2; // 0 on mobile, 15 on desktop
 
-  // Top 4 featured stories for carousel
-  const featuredStories = [
+  // Top featured stories fallback (local)
+  const localFeaturedStories: Story[] = useMemo(
+    () => [
     {
       name: "Ravneet",
       age: 4,
@@ -95,11 +143,14 @@ const SuccessStories = () => {
       hasBeforeAfter: true,
       beforeImage: "/successStories/4/before3.avif",
       afterImage: "/successStories/4/after1.avif",
-    }
-  ];
+      }
+    ],
+    []
+  );
 
-  // All stories for bottom section
-  const allStories = [
+  // All stories fallback (local)
+  const localAllStories: Story[] = useMemo(
+    () => [
     {
       name: "Ravneet",
       age: 4,
@@ -187,34 +238,93 @@ const SuccessStories = () => {
       beforeImage: "/successStories/5/before2.avif",
       afterImage: "/successStories/5/after2.avif",
     },
-    {
-      name: "Maria",
-      age: 8,
-      condition: "Congenital Scoliosis",
-      story: "Born with severe spinal curvature, Maria's parents traveled from rural Mexico seeking help. After her surgery, she can now run and play like any other child.",
-      location: "Oaxaca, Mexico",
-      year: "Surgery in 2016",
-      image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400&h=300&fit=crop"
-    },
-    {
-      name: "Ahmed",
-      age: 15,
-      condition: "Kyphoscoliosis",
-      story: "Ahmed's severe spinal deformity affected his breathing and mobility. Today, he's planning to become a doctor himself to help others like him.",
-      location: "Morocco",
-      year: "Surgery in 2017",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop"
-    },
-    {
-      name: "Priya",
-      age: 11,
-      condition: "Neuromuscular Scoliosis",
-      story: "Priya's condition was progressing rapidly, threatening her lung function. After surgery, she returned to school and is now top of her class.",
-      location: "Kerala, India",
-      year: "Surgery in 2018",
-      image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=300&fit=crop"
+   
+    ],
+    []
+  );
+
+  const prepareImage = (img?: SanityImageRef): SanityImage | undefined => {
+    if (!img?.asset?._ref) return undefined;
+    return { _type: "image", asset: { _type: "reference", _ref: img.asset._ref } };
+  };
+
+  const getImageUrl = (
+    img?: SanityImageRef | { asset?: { _ref?: string; url?: string }; url?: string }
+  ): string | undefined => {
+    if (!img) return undefined;
+    const ref = img?.asset?._ref;
+    if (ref) {
+      return urlFor({ _type: "image", asset: { _type: "reference", _ref: ref } }).width(1400).quality(85).url();
     }
-  ];
+    const assetUrl = (img as { asset?: { url?: string } })?.asset?.url;
+    if (assetUrl) return assetUrl;
+    const directUrl = (img as { url?: string })?.url;
+    if (directUrl) return directUrl;
+    return undefined;
+  };
+
+  const mapCmsStory = useCallback((story: CmsStory): Story => {
+    const beforeUrl = getImageUrl(story?.beforeImage || story?.beforeSurgeryImages?.[0]);
+    const afterUrl = getImageUrl(story?.afterImage || story?.afterSurgeryImages?.[0]);
+
+    const gallerySources: (SanityImageRef | { asset?: { _ref?: string; url?: string }; url?: string } | undefined)[] = [
+      ...(story?.beforeSurgeryImages || []),
+      ...(story?.afterSurgeryImages || []),
+      ...(story?.beforeImages || []),
+      ...(story?.afterImages || []),
+      ...(story?.gallery || []),
+      ...(story?.images || []),
+      story?.featuredImage,
+      story?.beforeImage,
+      story?.afterImage,
+    ];
+
+    const galleryUrls = gallerySources
+      .map((item) => getImageUrl(item) || (prepareImage(item) ? urlFor(prepareImage(item)!).width(1400).quality(85).url() : undefined))
+      .filter(Boolean) as string[];
+
+    const mainUrl = getImageUrl(story?.featuredImage) || galleryUrls[0];
+    const missionYear = story?.missionDate ? new Date(story.missionDate).getFullYear() : undefined;
+    const loc =
+      typeof story?.location === "string"
+        ? story.location
+        : story?.location?.city || story?.location?.country
+        ? [story.location.city, story.location.country].filter(Boolean).join(", ")
+        : undefined;
+    return {
+      name: story?.patientName || story?.title || "Patient Story",
+      age: story?.age,
+      condition: story?.condition,
+      location: loc,
+      story: story?.summary || story?.outcome || "Story coming soon.",
+      image: mainUrl || galleryUrls[0],
+      gallery: galleryUrls.length ? galleryUrls : mainUrl ? [mainUrl] : [],
+      hasBeforeAfter: Boolean(beforeUrl && afterUrl),
+      beforeImage: beforeUrl,
+      afterImage: afterUrl,
+      year: missionYear ? `Mission ${missionYear}` : undefined,
+    };
+  }, []);
+
+  const featuredStories: Story[] = useMemo(() => {
+    const cmsAll = Array.isArray(cmsStories)
+      ? cmsStories.map(mapCmsStory).filter((s) => s.image || s.story)
+      : [];
+    // If no CMS stories, show locals; otherwise show CMS stories ordered by mission date (descending)
+    if (cmsAll.length === 0) return localFeaturedStories;
+    return cmsAll.sort((a, b) => {
+      const yearA = Number(a.year?.replace(/\D/g, "")) || 0;
+      const yearB = Number(b.year?.replace(/\D/g, "")) || 0;
+      return yearB - yearA;
+    });
+  }, [cmsStories, localFeaturedStories, mapCmsStory]);
+
+  const allStories: Story[] = useMemo(() => {
+    const cmsAll = Array.isArray(cmsStories)
+      ? cmsStories.map(mapCmsStory).filter((s) => s.image || s.story)
+      : [];
+    return [...cmsAll, ...localAllStories];
+  }, [cmsStories, localAllStories, mapCmsStory]);
 
   const displayedStories = showAllStories ? allStories : allStories.slice(0, 6);
 
@@ -253,6 +363,15 @@ const SuccessStories = () => {
     return () => clearInterval(interval);
   }, [currentCarouselSlide, goToSlide]);
 
+  // Responsive detection for carousel layout
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = () => setIsMobile(mq.matches);
+    handler();
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -267,14 +386,19 @@ const SuccessStories = () => {
               <div className="relative">
               <div className="overflow-hidden rounded-3xl">
                 <div
-                  className="flex transition-transform duration-700 ease-out"
-                  style={{ transform: `translateX(-${currentCarouselSlide * 100}%)` }}
+                  className="flex gap-4 md:gap-6 transition-transform duration-700 ease-out"
+                  style={{
+                    transform: `translateX(calc(-${currentCarouselSlide * slideWidthPercent}% + ${slidePeekOffset}%))`,
+                  }}
                 >
                   {featuredStories.map((story, index) => (
-                    <div key={index} className="min-w-full shrink-0 px-2 md:px-4">
+                    <div
+                      key={index}
+                      className={`${isMobile ? "min-w-full" : "min-w-[70%] md:min-w-[70%] lg:min-w-[70%]"} shrink-0 px-2 md:px-3 lg:px-4`}
+                    >
                       <div
-                        className={`relative aspect-[16/9] max-h-[640px] w-full rounded-3xl overflow-hidden transition duration-500 ${
-                          index === currentCarouselSlide ? "opacity-100" : "opacity-70"
+                        className={`relative aspect-[9/14] max-h-[640px] w-[90%] rounded-3xl overflow-hidden transition duration-300 ${
+                          index === currentCarouselSlide ? "opacity-100" : "opacity-80"
                         }`}
                       >
                               {story.hasBeforeAfter ? (
@@ -406,7 +530,7 @@ const SuccessStories = () => {
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
                 {displayedStories.map((story, index) => (
                   <Card
                     key={index}
@@ -414,7 +538,7 @@ const SuccessStories = () => {
                     onClick={() => setExpandedStory(expandedStory === index ? null : index)}
                     className="overflow-hidden bg-card shadow-soft hover:shadow-card transition-all duration-300 hover:scale-105 md:cursor-default cursor-pointer"
                   >
-                    <div className="relative h-64">
+                    <div className="relative aspect-[9/12] w-full overflow-hidden">
                       <img
                         src={story.image}
                         alt={story.name}
@@ -517,55 +641,55 @@ const SuccessStories = () => {
                   {/* Media */}
                   <div className="grid md:grid-cols-[1.3fr_1fr] gap-4">
                     <div className="relative space-y-3">
-                      {story.hasBeforeAfter && story.beforeImage && story.afterImage ? (
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          <div className="relative">
-                            <img
-                              src={story.beforeImage}
-                              alt={`${story.name} before treatment`}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                            <Badge className="absolute top-2 left-2 bg-red-500 text-white">Before</Badge>
-                          </div>
-                          <div className="relative">
-                            <img
-                              src={story.afterImage}
-                              alt={`${story.name} after treatment`}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                            <Badge className="absolute top-2 left-2 bg-medical-teal text-white">After</Badge>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          {activeMedia && (
-                            <img
-                              src={activeMedia}
-                              alt={story.name}
-                              className="w-full h-full max-h-[420px] object-cover rounded-xl"
-                            />
-                          )}
-                          {story.gallery && story.gallery.length > 1 && (
-                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                              {story.gallery.map((img, i) => (
-                                <button
-                                  key={img + i}
-                                  onClick={() => setActiveMedia(img)}
-                                  className={`relative h-24 w-full overflow-hidden rounded-md border transition ${
-                                    activeMedia === img ? "border-medical-teal ring-1 ring-medical-teal/50" : "border-transparent"
-                                  }`}
-                                >
-                                  <img
-                                    src={img}
-                                    alt={`${story.name} gallery ${i + 1}`}
-                                    className="h-full w-full object-cover"
-                                  />
-                                </button>
-                              ))}
+                      <div className="space-y-4">
+                        {story.hasBeforeAfter && story.beforeImage && story.afterImage && (
+                          <div className="grid sm:grid-cols-2 gap-3">
+                            <div className="relative">
+                              <img
+                                src={story.beforeImage}
+                                alt={`${story.name} before treatment`}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                              <Badge className="absolute top-2 left-2 bg-red-500 text-white">Before</Badge>
                             </div>
-                          )}
-                        </>
-                      )}
+                            <div className="relative">
+                              <img
+                                src={story.afterImage}
+                                alt={`${story.name} after treatment`}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                              <Badge className="absolute top-2 left-2 bg-medical-teal text-white">After</Badge>
+                            </div>
+                          </div>
+                        )}
+
+                        {activeMedia && (
+                          <img
+                            src={activeMedia}
+                            alt={story.name}
+                            className="w-full h-full max-h-[420px] object-cover rounded-xl"
+                          />
+                        )}
+                        {story.gallery && story.gallery.length > 0 && (
+                          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                            {story.gallery.map((img, i) => (
+                              <button
+                                key={img + i}
+                                onClick={() => setActiveMedia(img)}
+                                className={`relative h-24 w-full overflow-hidden rounded-md border transition ${
+                                  activeMedia === img ? "border-medical-teal ring-1 ring-medical-teal/50" : "border-transparent"
+                                }`}
+                              >
+                                <img
+                                  src={img}
+                                  alt={`${story.name} gallery ${i + 1}`}
+                                  className="h-full w-full object-cover"
+                                />
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div className="space-y-3">
