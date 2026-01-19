@@ -3,8 +3,8 @@ import imageUrlBuilder from '@sanity/image-url'
 
 // Sanity client configuration
 export const client = createClient({
-     projectId: 'wfeqwe3v',
-  dataset: 'production',
+     projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
+  dataset: import.meta.env.VITE_SANITY_DATASET,
   apiVersion: '2023-05-03',
   useCdn: true,
   // No token needed for public read access
@@ -158,6 +158,7 @@ export const queries = {
     title,
     specialization,
     bio,
+    detailedBio,
     credentials,
     experience,
     hospital,
@@ -571,6 +572,8 @@ export interface PatientStory {
   isFeatured?: boolean
 }
 
+type PortableTextBlock = { _type?: string; children?: { text?: string }[] }
+
 export interface TeamMember {
   _id: string
   name: string
@@ -578,6 +581,7 @@ export interface TeamMember {
   title: string
   specialization: string
   bio: string
+  detailedBio?: PortableTextBlock[]
   credentials?: string[]
   experience?: number
   hospital?: string

@@ -14,7 +14,7 @@ const ContactPage = () => {
       address: "21C Orinda Way, Suite #267",
       zipCode: "Orinda, CA 94563",
       email: "standingstraight@standingstraight.org",
-      phone: "925 900-3451",
+      phone: "925 257-3045",
       hours: "Mon-Fri 9AM-5PM PST",
       icon: Building
     },
@@ -120,12 +120,12 @@ const ContactPage = () => {
                       </div>
 
                       {office.phone && (
-                        <div className="flex items-center gap-3">
-                          <Phone className="w-5 h-5 text-trust-blue" />
-                          <a href={`tel:${office.phone}`} className="text-text-gray hover:text-trust-blue transition-colors">
-                            {office.phone}
-                          </a>
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <Phone className="w-5 h-5 text-trust-blue" />
+                        <a href={`tel:${office.phone}`} className="text-text-gray hover:text-trust-blue transition-colors">
+                          {office.phone}
+                        </a>
+                      </div>
                       )}
 
                       <div className="flex items-center gap-3">

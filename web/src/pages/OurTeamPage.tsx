@@ -113,6 +113,17 @@ const OurTeamPage = () => {
       return fallbackMembers;
     }
 
+    const blocksToText = (blocks?: any[]): string => {
+      if (!Array.isArray(blocks)) return "";
+      return blocks
+        .map((block) => {
+          if (block?._type !== "block" || !Array.isArray(block.children)) return "";
+          return block.children.map((child: any) => child.text || "").join("");
+        })
+        .filter(Boolean)
+        .join("\n\n");
+    };
+
     const toDisplayMember = (member: SanityTeamMember): TeamMember => {
       const location = [member.location?.city, member.location?.country]
         .filter(Boolean)
@@ -131,7 +142,7 @@ const OurTeamPage = () => {
         location: location || "Global",
         specialty: member.specialization || member.role || "Team Member",
         summary: member.bio || "",
-        bio: member.bio || "",
+        bio: blocksToText(member.detailedBio) || member.bio || "",
         focusAreas: member.languages,
       };
     };

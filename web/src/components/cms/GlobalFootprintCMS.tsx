@@ -154,7 +154,7 @@ const GlobalFootprintCMS = () => {
               <div className="space-y-2 text-text-gray">
                 <p>21C Orinda Way, Suite #267, Orinda, CA 94563</p>
                 <p>Email: standingstraight@standingstraight.org</p>
-                <p>Phone: 925 900-3451</p>
+                <p>Phone: 925 257-3045</p>
               </div>
             </Card>
 
