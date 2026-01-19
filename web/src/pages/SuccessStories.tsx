@@ -43,6 +43,12 @@ type CmsStory = {
   afterSurgeryImages?: SanityImageRef[];
   beforeImages?: SanityImageRef[];
   afterImages?: SanityImageRef[];
+  videoUrl?: string;
+  video?: {
+    asset?: { url?: string };
+    file?: { asset?: { url?: string } };
+    url?: string;
+  };
   patientName?: string;
   title?: string;
   age?: number;
@@ -60,7 +66,8 @@ const SuccessStories = () => {
   const [showAllStories, setShowAllStories] = useState(false);
   const [expandedStory, setExpandedStory] = useState<number | null>(null);
   const [selectedStory, setSelectedStory] = useState<number | null>(null);
-  const [activeMedia, setActiveMedia] = useState<string | null>(null);
+  type MediaItem = { url: string; type: "image" | "video"; label?: string };
+  const [activeMediaItem, setActiveMediaItem] = useState<MediaItem | null>(null);
   // default to mobile to avoid peeking on first paint; effect will update
   const [isMobile, setIsMobile] = useState(true);
   const slideWidthPercent = isMobile ? 100 : 70; // mobile full width, desktop shows peeks
@@ -266,6 +273,11 @@ const SuccessStories = () => {
   const mapCmsStory = useCallback((story: CmsStory): Story => {
     const beforeUrl = getImageUrl(story?.beforeImage || story?.beforeSurgeryImages?.[0]);
     const afterUrl = getImageUrl(story?.afterImage || story?.afterSurgeryImages?.[0]);
+    const videoUrl =
+      story?.videoUrl ||
+      story?.video?.file?.asset?.url ||
+      story?.video?.asset?.url ||
+      story?.video?.url;
 
     const gallerySources: (SanityImageRef | { asset?: { _ref?: string; url?: string }; url?: string } | undefined)[] = [
       ...(story?.beforeSurgeryImages || []),
@@ -302,6 +314,7 @@ const SuccessStories = () => {
       hasBeforeAfter: Boolean(beforeUrl && afterUrl),
       beforeImage: beforeUrl,
       afterImage: afterUrl,
+      videoUrl,
       year: missionYear ? `Mission ${missionYear}` : undefined,
     };
   }, []);
@@ -330,20 +343,26 @@ const SuccessStories = () => {
 
   useEffect(() => {
     if (selectedStory === null) {
-      setActiveMedia(null);
+      setActiveMediaItem(null);
       return;
     }
     const story =
       selectedStory < featuredStories.length
         ? featuredStories[selectedStory]
         : allStories[selectedStory - featuredStories.length];
-    const firstImage =
-      story?.gallery?.[0] ||
-      story?.image ||
-      story?.beforeImage ||
-      story?.afterImage ||
-      null;
-    setActiveMedia(firstImage);
+
+    const mediaItems: MediaItem[] = [];
+    if (story.videoUrl) mediaItems.push({ url: story.videoUrl, type: "video", label: "Video" });
+    if (story.beforeImage) mediaItems.push({ url: story.beforeImage, type: "image", label: "Before" });
+    if (story.afterImage) mediaItems.push({ url: story.afterImage, type: "image", label: "After" });
+    if (story.gallery?.length) {
+      mediaItems.push(...story.gallery.map((url) => ({ url, type: "image" as const })));
+    }
+    if (story.image && !mediaItems.find((m) => m.url === story.image)) {
+      mediaItems.unshift({ url: story.image, type: "image" });
+    }
+
+    setActiveMediaItem(mediaItems[0] || null);
   }, [selectedStory, featuredStories, allStories]);
 
   const goToSlide = useCallback(
@@ -638,84 +657,67 @@ const SuccessStories = () => {
                 </DialogHeader>
                 
                 <div className="mt-4 space-y-5">
-                  {/* Media */}
-                  <div className="grid md:grid-cols-[1.3fr_1fr] gap-4">
-                    <div className="relative space-y-3">
-                      <div className="space-y-4">
-                        {story.hasBeforeAfter && story.beforeImage && story.afterImage && (
-                          <div className="grid sm:grid-cols-2 gap-3">
-                            <div className="relative">
-                              <img
-                                src={story.beforeImage}
-                                alt={`${story.name} before treatment`}
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                              <Badge className="absolute top-2 left-2 bg-red-500 text-white">Before</Badge>
-                            </div>
-                            <div className="relative">
-                              <img
-                                src={story.afterImage}
-                                alt={`${story.name} after treatment`}
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                              <Badge className="absolute top-2 left-2 bg-medical-teal text-white">After</Badge>
-                            </div>
-                          </div>
-                        )}
-
-                        {activeMedia && (
-                          <img
-                            src={activeMedia}
-                            alt={story.name}
-                            className="w-full h-full max-h-[420px] object-cover rounded-xl"
-                          />
-                        )}
-                        {story.gallery && story.gallery.length > 0 && (
-                          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                            {story.gallery.map((img, i) => (
-                              <button
-                                key={img + i}
-                                onClick={() => setActiveMedia(img)}
-                                className={`relative h-24 w-full overflow-hidden rounded-md border transition ${
-                                  activeMedia === img ? "border-medical-teal ring-1 ring-medical-teal/50" : "border-transparent"
-                                }`}
-                              >
-                                <img
-                                  src={img}
-                                  alt={`${story.name} gallery ${i + 1}`}
-                                  className="h-full w-full object-cover"
-                                />
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                        {story.videoUrl && (
-                          <div className="rounded-xl overflow-hidden bg-black/5 border border-border">
-                            <video
-                              controls
-                              className="w-full h-full max-h-[360px] object-cover"
-                              src={story.videoUrl}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <p className="text-text-gray leading-relaxed text-base">{story.story}</p>
-                      {story.treatment && (
-                        <p className="text-sm text-medical-teal font-semibold">Treatment: {story.treatment}</p>
-                      )}
-                      {story.videoUrl && (
-                        <div className="rounded-xl overflow-hidden bg-black/5 border border-border">
+                  <div className="space-y-4">
+                    {activeMediaItem && (
+                      <div className="rounded-xl overflow-hidden bg-black/5 border border-border">
+                        {activeMediaItem.type === "video" ? (
                           <video
                             controls
-                            className="w-full h-full max-h-[260px] object-cover"
-                            src={story.videoUrl}
+                            className="w-full h-full max-h-[420px] object-cover"
+                            src={activeMediaItem.url}
                           />
-                        </div>
-                      )}
+                        ) : (
+                          <img
+                            src={activeMediaItem.url}
+                            alt={story.name}
+                            className="w-full h-full max-h-[420px] object-cover"
+                          />
+                        )}
+                      </div>
+                    )}
+
+                    {/* Thumbnails */}
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                      {(() => {
+                        const thumbs: MediaItem[] = [];
+                        if (story.videoUrl) thumbs.push({ url: story.videoUrl, type: "video", label: "Video" });
+                        if (story.beforeImage) thumbs.push({ url: story.beforeImage, type: "image", label: "Before" });
+                        if (story.afterImage) thumbs.push({ url: story.afterImage, type: "image", label: "After" });
+                        if (story.gallery?.length) {
+                          thumbs.push(...story.gallery.map((url) => ({ url, type: "image" as const })));
+                        }
+                        if (story.image && !thumbs.find((m) => m.url === story.image)) {
+                          thumbs.unshift({ url: story.image, type: "image" });
+                        }
+                        return thumbs;
+                      })().map((item, idx) => (
+                        <button
+                          key={item.url + idx}
+                          onClick={() => setActiveMediaItem(item)}
+                          className={`relative h-24 w-full overflow-hidden rounded-md border transition ${
+                            activeMediaItem?.url === item.url ? "border-medical-teal ring-1 ring-medical-teal/50" : "border-transparent"
+                          }`}
+                        >
+                          {item.type === "video" ? (
+                            <div className="relative h-full w-full bg-black/60 flex items-center justify-center text-white text-xs font-semibold">
+                              <span className="px-2 py-1 bg-black/70 rounded">Video</span>
+                            </div>
+                          ) : (
+                            <img src={item.url} alt={`${story.name} thumb ${idx + 1}`} className="h-full w-full object-cover" />
+                          )}
+                          {item.label && (
+                            <Badge className="absolute top-1 left-1 bg-black/70 text-white text-[10px] px-2 py-0.5">{item.label}</Badge>
+                          )}
+                        </button>
+                      ))}
                     </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="text-text-gray leading-relaxed text-base">{story.story}</p>
+                    {story.treatment && (
+                      <p className="text-sm text-medical-teal font-semibold">Treatment: {story.treatment}</p>
+                    )}
                   </div>
                 </div>
               </>

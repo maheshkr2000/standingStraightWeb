@@ -113,12 +113,13 @@ const OurTeamPage = () => {
       return fallbackMembers;
     }
 
-    const blocksToText = (blocks?: any[]): string => {
+    type PortableTextBlock = { _type?: string; children?: { text?: string }[] };
+    const blocksToText = (blocks?: PortableTextBlock[]): string => {
       if (!Array.isArray(blocks)) return "";
       return blocks
         .map((block) => {
           if (block?._type !== "block" || !Array.isArray(block.children)) return "";
-          return block.children.map((child: any) => child.text || "").join("");
+          return block.children.map((child) => child.text || "").join("");
         })
         .filter(Boolean)
         .join("\n\n");
