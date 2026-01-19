@@ -689,6 +689,15 @@ const SuccessStories = () => {
                             ))}
                           </div>
                         )}
+                        {story.videoUrl && (
+                          <div className="rounded-xl overflow-hidden bg-black/5 border border-border">
+                            <video
+                              controls
+                              className="w-full h-full max-h-[360px] object-cover"
+                              src={story.videoUrl}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 
