@@ -220,6 +220,32 @@ export const patientStory = defineType({
       description: 'Main image for story preview',
     }),
     defineField({
+      name: 'video',
+      title: 'Video',
+      type: 'object',
+      fields: [
+        {
+          name: 'file',
+          title: 'Upload Video',
+          type: 'file',
+          options: {accept: 'video/*'},
+        },
+        {
+          name: 'url',
+          title: 'External Video URL',
+          type: 'url',
+          description: 'Optional link to a hosted video',
+        },
+      ],
+      description: 'Add a video (upload or external link) for this story',
+    }),
+    defineField({
+      name: 'videoUrl',
+      title: 'Video URL (legacy)',
+      type: 'url',
+      hidden: true,
+    }),
+    defineField({
       name: 'outcome',
       title: 'Surgery Outcome',
       type: 'string',
