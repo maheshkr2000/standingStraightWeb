@@ -656,7 +656,7 @@ const SuccessStories = () => {
                   </DialogDescription>
                 </DialogHeader>
                 
-                <div className="mt-4 space-y-5">
+                <div className="mt-4 grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
                   <div className="space-y-4">
                     {activeMediaItem && (
                       <div className="rounded-xl overflow-hidden bg-black/5 border border-border">
