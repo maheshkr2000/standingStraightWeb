@@ -8,6 +8,7 @@ const HeroSectionCMS = () => {
   const { data: heroData, isLoading, error } = useHeroSection();
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showDesc, setShowDesc] = useState(false);
 
   // Fallback data for when CMS is not available
   const fallbackHero: HeroSectionType = {
@@ -61,6 +62,17 @@ const HeroSectionCMS = () => {
     return () => clearInterval(id);
   }, [api, autoplayMs, hero.slides?.length]);
 
+  // Reveal description after slight scroll
+  useEffect(() => {
+    const onScroll = () => {
+      const scrolled = window.scrollY || document.documentElement.scrollTop;
+      setShowDesc(scrolled > 20);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     if (!api) return;
     const onSelect = () => setSelectedIndex(api.selectedScrollSnap());
@@ -101,7 +113,7 @@ const HeroSectionCMS = () => {
   }
 
   return (
-    <section className="relative min-h-screen h-[100svh] flex items-stretch overflow-hidden">
+    <section className="relative min-h-screen flex items-stretch overflow-hidden">
       {/* Background Slideshow */}
       <div className="absolute inset-0 z-0">
         <Carousel opts={{ loop: true }} setApi={setApi} className="h-full">
@@ -147,7 +159,7 @@ const HeroSectionCMS = () => {
                            srcSet={srcSet}
                            sizes="100vw"
                            alt={slide.image.alt || `Hero slide ${index + 1}`}
-                           className="relative w-full h-full object-contain mt-14"
+                           className="relative w-full h-full object-cover"
                            onError={(e) => {
                              const target = e.target as HTMLImageElement;
                              target.style.visibility = 'hidden';
@@ -189,7 +201,7 @@ const HeroSectionCMS = () => {
       </div>
       
       {/* Content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full h-full flex items-start pt-32 md:pt-40 lg:pt-44 pb-12">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 w-full h-full flex items-start pt-32 md:pt-40 lg:pt-64 pb-12">
         <div className="text-center lg:text-left w-full mt-6 md:mt-10">
           {/* Loading state */}
           {isLoading ? (
@@ -203,13 +215,21 @@ const HeroSectionCMS = () => {
             </div>
           ) : (
             <div className="max-w-4xl lg:max-w-5xl">
-              <h1 className="text-4xl md:text-[52px] lg:text-[64px] font-bold mb-6 leading-[1.1] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+              <h1
+                className={`text-4xl md:text-[52px] lg:text-[64px] font-bold mb-6 leading-[1.1] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-500 ${
+                  showDesc ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+                }`}
+              >
                 <span className="block text-balance">{hero.title}</span>
                 <span className="block bg-gradient-hero bg-clip-text text-transparent">
                   {hero.subtitle}
                 </span>
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed drop-shadow-[0_6px_18px_rgba(0,0,0,0.3)] bg-black/15 backdrop-blur-sm px-4 py-3 rounded-xl inline-block">
+              <p
+                className={`text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed drop-shadow-[0_6px_18px_rgba(0,0,0,0.3)] bg-black/15 backdrop-blur-sm px-4 py-3 rounded-xl inline-block transition-all duration-500 ${
+                  showDesc ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+                }`}
+              >
                 {hero.description}
               </p>
             </div>
